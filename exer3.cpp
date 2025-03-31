@@ -47,6 +47,12 @@ glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
 
+bool firstMouse = true;
+float yaw   = -90.0f;
+float pitch =  0.0f;
+float lastX =  640 / 2.0;
+float lastY =  360 / 2.0;
+float fov   =  45.0f;
 
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
@@ -55,6 +61,7 @@ float lastFrame = 0.0f; // Time of last frame
 // arrays, shader programs, etc.; returns true if successful, false otherwise
 bool setup()
 {
+
     // generate the VAO and VBO objects and store their IDs in vao and vbo, respectively
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
@@ -142,7 +149,41 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;}
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; 
+    lastX = xpos;
+    lastY = ypos;
+
+    float sensitivity = 0.1;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw   += xoffset;
+    pitch += yoffset;
+
+    if(pitch > 89.0f)
+        pitch = 89.0f;
+    if(pitch < -89.0f)
+        pitch = -89.0f;
+
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraFront = glm::normalize(direction);
+}  
 
 /*****************************************************************************/
 
@@ -182,6 +223,8 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
+
 
     // make the window the current context of subsequent OpenGL commands,
     // and enable vertical sync and aspect-ratio correction on the GLFW window
@@ -209,6 +252,7 @@ int main(int argc, char** argv)
             // (by default, GLFW uses double-buffering with a front and back buffer;
             // all drawing goes to the back buffer, so the frame does not get shown yet)
             processInput(pWindow);
+            glfwSetCursorPosCallback(pWindow, mouse_callback);
             render();
 
             // swap the GLFW front and back buffers to show the next frame
