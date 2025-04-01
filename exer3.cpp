@@ -22,6 +22,7 @@
 #define WINDOW_HEIGHT 360
 #define WINDOW_TITLE  "Hello 3D World"
 GLFWwindow *pWindow;
+#define PI 3.14159
 
 float width = 1/3.5;
 // define a vertex array to hold our vertices
@@ -29,18 +30,63 @@ float width = 1/3.5;
 float white[3] = {1.0f, 1.0f, 1.0f};
 #define WHITE white[0], white[1], white[2]
 
+glm::vec2 rotateVertex(glm::vec2 vertex, float a) {
+    glm::mat2 m = glm::mat2(cos(a), sin(a), -sin(a), cos(a));
+    return m * vertex;
+}
+
+#define ORIGIN 0.00f, 0.00f, -1.00f
+
+glm::vec2 inner_start = glm::vec2(0.25f, 0.25f*tan(54*PI/180));
+#define INNER_STAR(a) rotateVertex(inner_start, a*72*PI/180)[0], rotateVertex(inner_start, a*72*PI/180)[1], -1.0f
+
+glm::vec2 outer_start = glm::vec2(0.0f, 1.0f);
+#define OUTER_STAR(a) rotateVertex(outer_start, a*72*PI/180)[0], rotateVertex(outer_start, a*72*PI/180)[1], -1.0f
 
 
 float vertices[] =
 {
 // position (x, y, z) color (r, g, b)
-    -0.50f, -0.50f, -1.00f, WHITE,
-    0.50f, -0.50f, -1.00f,  WHITE,
-    -0.50f, 0.50f, -1.00f,  WHITE,
+    ORIGIN, WHITE,
+    INNER_STAR(0),  WHITE,
+    OUTER_STAR(0),  WHITE,
 
-    0.50f, 0.50f, -1.00f,   WHITE,
-    -0.50f, 0.50f, -1.00f,  WHITE,
-    0.50f, -0.50f, -1.00f,  WHITE
+    ORIGIN,   WHITE,
+    OUTER_STAR(0),  WHITE,
+    INNER_STAR(1),  WHITE,
+
+    ORIGIN, WHITE,
+    INNER_STAR(1),  WHITE,
+    OUTER_STAR(1),  WHITE,
+
+    ORIGIN,   WHITE,
+    OUTER_STAR(1),  WHITE,
+    INNER_STAR(2),  WHITE,
+
+    ORIGIN, WHITE,
+    INNER_STAR(2),  WHITE,
+    OUTER_STAR(2),  WHITE,
+
+    ORIGIN,   WHITE,
+    OUTER_STAR(2),  WHITE,
+    INNER_STAR(3),  WHITE,
+
+    ORIGIN,   WHITE,
+    INNER_STAR(3),  WHITE,
+    OUTER_STAR(3),  WHITE,
+
+    ORIGIN,   WHITE,
+    OUTER_STAR(3),  WHITE,
+    INNER_STAR(4),  WHITE,
+
+    ORIGIN,   WHITE,
+    INNER_STAR(4),  WHITE,
+    OUTER_STAR(4),  WHITE,
+
+    ORIGIN,   WHITE,
+    OUTER_STAR(4),  WHITE,
+    INNER_STAR(0),  WHITE,
+    
 };
 
 // define OpenGL object IDs to represent the vertex array and the shader program in the GPU
@@ -235,7 +281,6 @@ int main(int argc, char** argv)
         glfwTerminate();
         return -1;
     }
-
     glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
 
 
