@@ -26,16 +26,21 @@ GLFWwindow *pWindow;
 float width = 1/3.5;
 // define a vertex array to hold our vertices
 
+float white[3] = {1.0f, 1.0f, 1.0f};
+#define WHITE white[0], white[1], white[2]
+
+
+
 float vertices[] =
 {
 // position (x, y, z) color (r, g, b)
-    -0.50f, -0.50f, -1.00f,  1.0f, 1.0f, 1.0f,
-    0.50f, -0.50f, -1.00f,  1.0f, 1.0f, 1.0f,
-    -0.50f, 0.50f, -1.00f,  1.0f, 1.0f, 1.0f,
+    -0.50f, -0.50f, -1.00f, WHITE,
+    0.50f, -0.50f, -1.00f,  WHITE,
+    -0.50f, 0.50f, -1.00f,  WHITE,
 
-    0.50f, 0.50f, -1.00f,   1.0f, 1.0f, 1.0f,
-    -0.50f, 0.50f, -1.00f,   1.0f, 1.0f, 1.0f,
-    0.50f, -0.50f, -1.00f,   1.0f, 1.0f, 1.0f
+    0.50f, 0.50f, -1.00f,   WHITE,
+    -0.50f, 0.50f, -1.00f,  WHITE,
+    0.50f, -0.50f, -1.00f,  WHITE
 };
 
 // define OpenGL object IDs to represent the vertex array and the shader program in the GPU
@@ -56,6 +61,7 @@ float fov   =  45.0f;
 
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
+
 
 // called by the main function to do initial setup, such as uploading vertex
 // arrays, shader programs, etc.; returns true if successful, false otherwise
@@ -213,8 +219,15 @@ int main(int argc, char** argv)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+    // int windowX = (mode->width - windowWidth) / 2;
+    // int windowY = (mode->height - windowHeight) / 2;
+
     // create a GLFW window with the specified width, height, and title
     pWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, NULL, NULL);
+
+    glfwSetWindowPos(pWindow, (mode->width - 640)/2, (mode->height - 360)/2);
     if (! pWindow)
     {
         // gracefully terminate if we cannot create the window
