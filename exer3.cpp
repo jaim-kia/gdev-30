@@ -27,66 +27,40 @@ GLFWwindow *pWindow;
 float width = 1/3.5;
 // define a vertex array to hold our vertices
 
-float white[3] = {1.0f, 1.0f, 1.0f};
-#define WHITE white[0], white[1], white[2]
+#define YELLOW 1.0f, 1.0f, 0.6f
+#define WHITE 1.0f, 1.0f, 1.0f
 
 glm::vec2 rotateVertex(glm::vec2 vertex, float a) {
     glm::mat2 m = glm::mat2(cos(a), sin(a), -sin(a), cos(a));
     return m * vertex;
 }
 
-#define ORIGIN 0.00f, 0.00f, -1.00f
+#define ORIGIN 0.00f, 0.00f, 0.1f, WHITE
 
-glm::vec2 inner_start = glm::vec2(0.25f, 0.25f*tan(54*PI/180));
-#define INNER_STAR(a) rotateVertex(inner_start, a*72*PI/180)[0], rotateVertex(inner_start, a*72*PI/180)[1], -1.0f
+glm::vec2 sv_zero = glm::vec2(0.0f, 0.2f);
+glm::vec2 sv_one = glm::vec2(0.25f, 0.25f*tan(54*PI/180));
+glm::vec2 sv_two = glm::vec2(0.20f, 0.40f);
+glm::vec2 sv_three = glm::vec2(0.05f, 0.68f);
+glm::vec2 sv_four = glm::vec2(0.0f, 0.7f);
+glm::vec2 sv_five = glm::vec2(-0.05f, 0.68f);
+glm::vec2 sv_six = glm::vec2(-0.2f, 0.4f);
 
-glm::vec2 outer_start = glm::vec2(0.0f, 1.0f);
-#define OUTER_STAR(a) rotateVertex(outer_start, a*72*PI/180)[0], rotateVertex(outer_start, a*72*PI/180)[1], -1.0f
+#define STAR_VERTS(start, a, z) rotateVertex(start, a*72*PI/180)[0], rotateVertex(start, a*72*PI/180)[1], z, YELLOW
 
+#define STAR_POINTS_ONE(b) STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_one, b, 0), STAR_VERTS(sv_two, b, 0), STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_two, b, 0), STAR_VERTS(sv_three, b, 0)
+#define STAR_POINTS_TWO(b) STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_three, b, 0), STAR_VERTS(sv_four, b, 0), STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_four, b, 0), STAR_VERTS(sv_five, b, 0)
+#define STAR_POINTS_THREE(b) STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_five, b, 0), STAR_VERTS(sv_six, b, 0), STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_six, b, 0), STAR_VERTS(sv_one, (b+1), 0)
+
+#define STAR_POINT(b) STAR_POINTS_ONE(b), STAR_POINTS_TWO(b), STAR_POINTS_THREE(b)
+
+#define INNER_STAR_POINTS(c) STAR_VERTS(sv_zero, c, 0.2), STAR_VERTS(sv_one, (c+1), 0), STAR_VERTS(sv_zero, (c+1), 0.2)
+#define INNER_PENTAGON(c) ORIGIN, STAR_VERTS(sv_zero, c, 0.2), STAR_VERTS(sv_zero, (c+1), 0.2)
 
 float vertices[] =
 {
-// position (x, y, z) color (r, g, b)
-    ORIGIN, WHITE,
-    INNER_STAR(0),  WHITE,
-    OUTER_STAR(0),  WHITE,
-
-    ORIGIN,   WHITE,
-    OUTER_STAR(0),  WHITE,
-    INNER_STAR(1),  WHITE,
-
-    ORIGIN, WHITE,
-    INNER_STAR(1),  WHITE,
-    OUTER_STAR(1),  WHITE,
-
-    ORIGIN,   WHITE,
-    OUTER_STAR(1),  WHITE,
-    INNER_STAR(2),  WHITE,
-
-    ORIGIN, WHITE,
-    INNER_STAR(2),  WHITE,
-    OUTER_STAR(2),  WHITE,
-
-    ORIGIN,   WHITE,
-    OUTER_STAR(2),  WHITE,
-    INNER_STAR(3),  WHITE,
-
-    ORIGIN,   WHITE,
-    INNER_STAR(3),  WHITE,
-    OUTER_STAR(3),  WHITE,
-
-    ORIGIN,   WHITE,
-    OUTER_STAR(3),  WHITE,
-    INNER_STAR(4),  WHITE,
-
-    ORIGIN,   WHITE,
-    INNER_STAR(4),  WHITE,
-    OUTER_STAR(4),  WHITE,
-
-    ORIGIN,   WHITE,
-    OUTER_STAR(4),  WHITE,
-    INNER_STAR(0),  WHITE,
-    
+    STAR_POINT(0), STAR_POINT(1), STAR_POINT(2), STAR_POINT(3), STAR_POINT(4),
+    INNER_STAR_POINTS(0), INNER_STAR_POINTS(1), INNER_STAR_POINTS(2), INNER_STAR_POINTS(3), INNER_STAR_POINTS(4),
+    INNER_PENTAGON(0), INNER_PENTAGON(1), INNER_PENTAGON(2), INNER_PENTAGON(3), INNER_PENTAGON(4),
 };
 
 // define OpenGL object IDs to represent the vertex array and the shader program in the GPU
