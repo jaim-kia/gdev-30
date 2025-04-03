@@ -190,15 +190,9 @@ void render()
     glm::mat4 matrix;
 
     float currentFrame = glfwGetTime();
+    float time = currentFrame;
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
-
-    matrix = glm::perspective(glm::radians(60.0f), 
-                            (float) WINDOW_WIDTH / WINDOW_HEIGHT,
-                            0.1f,
-                            100.0f);
-    matrix = matrix * glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-
 
     // matrix = glm::translate(matrix, glm::vec3(0.0f, 0.0f, -5.0f));
     // matrix = glm::rotate(matrix, glm::radians(-90.0f),
@@ -206,14 +200,39 @@ void render()
     // matrix = glm::scale(matrix, glm::vec3(5.0f, 5.0f, 1.0f));
 
     // ... draw our triangles
-    glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
 
-    matrix = glm::translate(matrix, glm::vec3(2.0f, 0.0f, 0.0f));
-    glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
+    matrix = glm::perspective(glm::radians(60.0f), 
+                            (float) WINDOW_WIDTH / WINDOW_HEIGHT,
+                            0.1f,
+                            100.0f);
 
+    // default
+    matrix = matrix * glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+
+
+    glBindVertexArray(vao);
+
+    // middle star
+    matrix = glm::rotate(matrix, time, glm::vec3(0.0f, 0.0f, 1.0f));
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
     glUniformMatrix4fv(glGetUniformLocation(shader, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+
+    // rightstar    
+    matrix = glm::rotate(matrix, -time, glm::vec3(0.0f, 0.0f, 1.0f));
+    matrix = glm::translate(matrix, glm::vec3(2.0f, 0.0f, 0.0f));
+    matrix = glm::rotate(matrix, time, glm::vec3(0.0f, 1.0f, 0.0f));
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
+    glUniformMatrix4fv(glGetUniformLocation(shader, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+
+    // leftstar
+    matrix = glm::rotate(matrix, -time, glm::vec3(0.0f, 1.0f, 0.0f));
+    matrix = glm::translate(matrix, glm::vec3(-2.0f, 0.0f, 0.0f));
+    matrix = glm::translate(matrix, glm::vec3(-2.0f, 0.0f, 0.0f));
+    matrix = glm::rotate(matrix, time, glm::vec3(1.0f, 0.0f, 0.0f));
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
+    glUniformMatrix4fv(glGetUniformLocation(shader, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+
+
     glUniform1i(glGetUniformLocation(shader, "shaderTextureEyes"), 0);
 
     glEnable(GL_CULL_FACE);
