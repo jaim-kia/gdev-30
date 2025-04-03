@@ -27,46 +27,87 @@ GLFWwindow *pWindow;
 float width = 1/3.5;
 // define a vertex array to hold our vertices
 
-#define YELLOW 1.0f, 1.0f, 0.6f
-#define WHITE 1.0f, 1.0f, 1.0f
+#define YELLOW 1.0f, 1.0f, 0.2f
+#define GOLD 1.0f, 0.8431f, 0.0f
+#define LYELLOW 1.0f, 1.0f, 0.6f
+#define BLACK 0.0f, 0.0f, 0.0f
 
 glm::vec2 rotateVertex(glm::vec2 vertex, float a) {
     glm::mat2 m = glm::mat2(cos(a), sin(a), -sin(a), cos(a));
     return m * vertex;
 }
 
-#define ORIGIN 0.00f, 0.00f, 0.1f, WHITE
+glm::vec3 rotateVertex3D(glm::vec3 vertex, glm::vec3 axis, float a) {
+    glm::mat3 m = glm::mat3(0, 0, 0, 0, 0, 0, 0, 0, 0);
+    if (axis == glm::vec3(0,0,1)) {
+        // roll
+        m = glm::mat3(cos(a), sin(a), 0, -sin(a), cos(a), 0, 0, 0, 1);
+    } else if (axis == glm::vec3(1,0,0)) {
+        // pitch
+        m = glm::mat3(1, 0, 0, 0, cos(a), sin(a), 0, -sin(a), cos(a));
+    } else {
+        // yaw
+        m = glm::mat3(cos(a), 0, -sin(a), 0, 1, 0, sin(a), 0, cos(a));
+    }
+    return m * vertex;
+}
 
-glm::vec2 sv_zero = glm::vec2(0.0f, 0.2f);
-glm::vec2 sv_one = glm::vec2(0.25f, 0.25f*tan(54*PI/180));
-glm::vec2 sv_two = glm::vec2(0.20f, 0.40f);
-glm::vec2 sv_three = glm::vec2(0.05f, 0.68f);
-glm::vec2 sv_four = glm::vec2(0.0f, 0.7f);
-glm::vec2 sv_five = glm::vec2(-0.05f, 0.68f);
-glm::vec2 sv_six = glm::vec2(-0.2f, 0.4f);
+float shift(float point) {
+    return point/2 + 0.5f;
+}
 
-#define STAR_VERTS(start, a, z) rotateVertex(start, a*72*PI/180)[0], rotateVertex(start, a*72*PI/180)[1], z, YELLOW
+glm::vec3 sv_zero = glm::vec3(0.0f, 0.6f, 0.30f);
+glm::vec3 sv_one = glm::vec3(0.35f, 0.35f*tan(54*PI/180), 0.0f);
+glm::vec3 sv_two = glm::vec3(0.33f, 0.50f, 0.0f);
+glm::vec3 sv_three = glm::vec3(0.05f, 0.88f, 0.0f);
+glm::vec3 sv_four = glm::vec3(0.0f, 0.9f, 0.0f);
+glm::vec3 sv_five = glm::vec3(-0.05f, 0.88f, 0.0f);
+glm::vec3 sv_six = glm::vec3(-0.33f, 0.50f, 0.0f);
 
-#define STAR_POINTS_ONE(b) STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_one, b, 0), STAR_VERTS(sv_two, b, 0), STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_two, b, 0), STAR_VERTS(sv_three, b, 0)
-#define STAR_POINTS_TWO(b) STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_three, b, 0), STAR_VERTS(sv_four, b, 0), STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_four, b, 0), STAR_VERTS(sv_five, b, 0)
-#define STAR_POINTS_THREE(b) STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_five, b, 0), STAR_VERTS(sv_six, b, 0), STAR_VERTS(sv_zero, b, 0.2), STAR_VERTS(sv_six, b, 0), STAR_VERTS(sv_one, (b+1), 0)
+glm::vec3 z_axis = glm::vec3(0.0f, 0.0f, 1.0f);
+glm::vec3 y_axis = glm::vec3(0.0f, 1.0f, 0.0f);
 
-#define STAR_POINT(b) STAR_POINTS_ONE(b), STAR_POINTS_TWO(b), STAR_POINTS_THREE(b)
+glm::vec3 sv_mid_zero = glm::vec3(0.0f, 0.3f, 0.4f);
 
-#define INNER_STAR_POINTS(c) STAR_VERTS(sv_zero, c, 0.2), STAR_VERTS(sv_one, (c+1), 0), STAR_VERTS(sv_zero, (c+1), 0.2)
-#define INNER_PENTAGON(c) ORIGIN, STAR_VERTS(sv_zero, c, 0.2), STAR_VERTS(sv_zero, (c+1), 0.2)
+
+#define ORIGIN(back) rotateVertex3D(glm::vec3(0.00f, 0.00f, 0.4f), y_axis, back)
+#define ORIGIN_SIDE(back) ORIGIN(back)[0], ORIGIN(back)[1], ORIGIN(back)[2], LYELLOW, shift(ORIGIN(back)[0]), shift(ORIGIN(back)[1])
+
+#define STAR_VERT(start, a, back) rotateVertex3D(rotateVertex3D(start, z_axis, a*72*PI/180), y_axis, back)
+#define STAR_VERTS(start, a, back, color) STAR_VERT(start, a, back)[0], STAR_VERT(start, a, back)[1], STAR_VERT(start, a, back)[2], color, shift(STAR_VERT(start, a, back)[0]), shift(STAR_VERT(start, a, back)[1])
+
+#define STAR_POINTS_ONE(b, back) STAR_VERTS(sv_zero, b, back, YELLOW), STAR_VERTS(sv_one, b, back, YELLOW), STAR_VERTS(sv_two, b, back, YELLOW), STAR_VERTS(sv_zero, b, back, YELLOW), STAR_VERTS(sv_two, b, back, YELLOW), STAR_VERTS(sv_three, b, back, GOLD)
+#define STAR_POINTS_TWO(b, back) STAR_VERTS(sv_zero, b, back, YELLOW), STAR_VERTS(sv_three, b, back, GOLD), STAR_VERTS(sv_four, b, back, GOLD), STAR_VERTS(sv_zero, b, back, YELLOW), STAR_VERTS(sv_four, b, back, GOLD), STAR_VERTS(sv_five, b, back, GOLD)
+#define STAR_POINTS_THREE(b, back) STAR_VERTS(sv_zero, b, back, YELLOW), STAR_VERTS(sv_five, b, back, GOLD), STAR_VERTS(sv_six, b, back, YELLOW), STAR_VERTS(sv_zero, b, back, YELLOW), STAR_VERTS(sv_six, b, back, YELLOW), STAR_VERTS(sv_one, (b+1), back, YELLOW)
+
+#define STAR_POINT(b, back) STAR_POINTS_ONE(b, back), STAR_POINTS_TWO(b, back), STAR_POINTS_THREE(b, back)
+
+#define INNER_STAR_POINTS(c, back) STAR_VERTS(sv_zero, c, back, YELLOW), STAR_VERTS(sv_one, (c+1), back, YELLOW), STAR_VERTS(sv_zero, (c+1), back, YELLOW)
+#define INNER_PENTAGON(c, back) ORIGIN_SIDE(back), STAR_VERTS(sv_mid_zero, c, back, YELLOW), STAR_VERTS(sv_mid_zero, (c+1), back, YELLOW)
+
+#define FILLING(c, back) STAR_VERTS(sv_mid_zero, c, back, YELLOW), STAR_VERTS(sv_zero, c, back, YELLOW), STAR_VERTS(sv_mid_zero, (c+1), back, YELLOW), STAR_VERTS(sv_mid_zero, (c+1), back, YELLOW), STAR_VERTS(sv_zero, c, back, YELLOW), STAR_VERTS(sv_zero, (c+1), back, YELLOW)
 
 float vertices[] =
 {
-    STAR_POINT(0), STAR_POINT(1), STAR_POINT(2), STAR_POINT(3), STAR_POINT(4),
-    INNER_STAR_POINTS(0), INNER_STAR_POINTS(1), INNER_STAR_POINTS(2), INNER_STAR_POINTS(3), INNER_STAR_POINTS(4),
-    INNER_PENTAGON(0), INNER_PENTAGON(1), INNER_PENTAGON(2), INNER_PENTAGON(3), INNER_PENTAGON(4),
+    STAR_POINT(0, 0), STAR_POINT(1, 0), STAR_POINT(2, 0), STAR_POINT(3, 0), STAR_POINT(4, 0),
+    INNER_STAR_POINTS(0, 0), INNER_STAR_POINTS(1, 0), INNER_STAR_POINTS(2, 0), INNER_STAR_POINTS(3, 0), INNER_STAR_POINTS(4, 0),
+    INNER_PENTAGON(0, 0), INNER_PENTAGON(1, 0), INNER_PENTAGON(2, 0), INNER_PENTAGON(3, 0), INNER_PENTAGON(4, 0),
+    FILLING(0, 0), FILLING(1, 0), FILLING(2, 0), FILLING(3, 0), FILLING(4, 0),
+
+    
+    STAR_POINT(0, PI), STAR_POINT(1, PI), STAR_POINT(2, PI), STAR_POINT(3, PI), STAR_POINT(4, PI),
+    INNER_STAR_POINTS(0, PI), INNER_STAR_POINTS(1, PI), INNER_STAR_POINTS(2, PI), INNER_STAR_POINTS(3, PI), INNER_STAR_POINTS(4, PI),
+    INNER_PENTAGON(0, PI), INNER_PENTAGON(1, PI), INNER_PENTAGON(2, PI), INNER_PENTAGON(3, PI), INNER_PENTAGON(4, PI),
+    FILLING(0, PI), FILLING(1, PI), FILLING(2, PI), FILLING(3, PI), FILLING(4, PI),
+
 };
 
 // define OpenGL object IDs to represent the vertex array and the shader program in the GPU
 GLuint vao;         // vertex array object (stores the render state for our vertex array)
 GLuint vbo;         // vertex buffer object (reserves GPU memory for our vertex array)
 GLuint shader;      // combined vertex and fragment shader
+GLuint texture_eyes;
+
 
 glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -105,13 +146,15 @@ bool setup()
     // - ... its values will NOT be normalized (GL_FALSE)
     // - ... the stride length is the number of bytes of all 3 floats of each vertex (hence, 3 * sizeof(float))
     // - ... and we start at the beginning of the array (hence, (void*) 0)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*) 0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*) (3 * sizeof(float)));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) 0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (3 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (6 * sizeof(float)));
 
     // enable the newly-created layout location 0;
     // this shall be used by our vertex shader to read the vertex's x, y, and z
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
 
 
     // important: if you have more vertex arrays to draw, make sure you separately define them
@@ -122,6 +165,9 @@ bool setup()
     if (! shader)
         return false;
 
+    texture_eyes = gdevLoadTexture("texture_eyes.png", GL_REPEAT, true, true);
+    if (! texture_eyes) return false;
+
     return true;
 }
 
@@ -129,12 +175,16 @@ bool setup()
 void render()
 {
 
+
     // clear the whole frame
-    glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // using our shader program...
     glUseProgram(shader);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_eyes);
 
     glEnable(GL_DEPTH_TEST);
     glm::mat4 matrix;
@@ -149,19 +199,24 @@ void render()
                             100.0f);
     matrix = matrix * glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
+
     // matrix = glm::translate(matrix, glm::vec3(0.0f, 0.0f, -5.0f));
     // matrix = glm::rotate(matrix, glm::radians(-90.0f),
     // glm::vec3(1.0f, 0.0f, 0.0f));
     // matrix = glm::scale(matrix, glm::vec3(5.0f, 5.0f, 1.0f));
 
-
-
-
-    glUniformMatrix4fv(glGetUniformLocation(shader, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
-
     // ... draw our triangles
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(float)));
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
+
+    matrix = glm::translate(matrix, glm::vec3(2.0f, 0.0f, 0.0f));
+    glBindVertexArray(vao);
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
+
+    glUniformMatrix4fv(glGetUniformLocation(shader, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+    glUniform1i(glGetUniformLocation(shader, "shaderTextureEyes"), 0);
+
+    glEnable(GL_CULL_FACE);
 }
 
 void processInput(GLFWwindow *window)
