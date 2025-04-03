@@ -209,7 +209,6 @@ void render()
     // default
     matrix = matrix * glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
-
     glBindVertexArray(vao);
 
     // middle star
