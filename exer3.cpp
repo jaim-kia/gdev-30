@@ -175,7 +175,7 @@ bool setup()
     texture_eyes = gdevLoadTexture("texture_eyes.png", GL_REPEAT, true, true);
     if (! texture_eyes) return false;
 
-    texture_rainbow = gdevLoadTexture("texture_rainbow.png", GL_MIRRORED_REPEAT, true, true);
+    texture_rainbow = gdevLoadTexture("texture_rainbow.png", GL_REPEAT, true, true);
     if (! texture_rainbow) return false;
 
     return true;
