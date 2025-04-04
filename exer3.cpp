@@ -113,7 +113,7 @@ float vertices[] =
 GLuint vao;         // vertex array object (stores the render state for our vertex array)
 GLuint vbo;         // vertex buffer object (reserves GPU memory for our vertex array)
 GLuint shader;      // combined vertex and fragment shader
-GLuint texture_eyes;
+GLuint texture_eyes, texture_rainbow;
 
 
 glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
@@ -175,6 +175,9 @@ bool setup()
     texture_eyes = gdevLoadTexture("texture_eyes.png", GL_REPEAT, true, true);
     if (! texture_eyes) return false;
 
+    texture_rainbow = gdevLoadTexture("texture_rainbow.png", GL_MIRRORED_REPEAT, true, true);
+    if (! texture_rainbow) return false;
+
     return true;
 }
 
@@ -192,6 +195,9 @@ void render()
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_eyes);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture_rainbow);
+
 
     glEnable(GL_DEPTH_TEST);
     glm::mat4 matrix;
@@ -244,6 +250,9 @@ void render()
 
 
     glUniform1i(glGetUniformLocation(shader, "shaderTextureEyes"), 0);
+    glUniform1i(glGetUniformLocation(shader, "shaderRainbow"), 1);
+
+    glUniform1f(glGetUniformLocation(shader, "time"), currentFrame);
 
     glEnable(GL_CULL_FACE);
 }
