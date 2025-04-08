@@ -30,6 +30,8 @@
 #define WINDOW_TITLE  "Hello 3D World"
 GLFWwindow *pWindow;
 #define PI 3.14159
+#define SQUISH(offset) glm::clamp(2*sin(time + (PI/6) - offset*(PI/3)), 1.0, 2.0)
+
 
 float width = 1/3.5;
 // define a vertex array to hold our vertices
@@ -232,28 +234,41 @@ void render()
     glBindVertexArray(vao);
 
     // middle star
+    matrix = glm::translate(matrix, glm::vec3(0.0f, 0.0f, -1.0f));
     matrix = glm::rotate(matrix, time, glm::vec3(0.0f, 0.0f, 1.0f));
+    matrix = glm::scale(matrix, glm::vec3(SQUISH(2), SQUISH(2), SQUISH(2) )); 
+    
     glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
     glUniformMatrix4fv(glGetUniformLocation(shader, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
 
-    // rightstar    
-    matrix = glm::rotate(matrix, -time, glm::vec3(0.0f, 0.0f, 1.0f));
 
-    matrix = glm::translate(matrix, glm::vec3(2.3f, 0.0f, 0.0f));
+    // rightstar    
+    matrix = glm::scale(matrix, glm::vec3(1/SQUISH(2), 1/SQUISH(2), 1/SQUISH(2) )); 
+    matrix = glm::rotate(matrix, -time, glm::vec3(0.0f, 0.0f, 1.0f));
+    matrix = glm::translate(matrix, glm::vec3(0.0f, 0.0f, 1.0f));
+
+
+    matrix = glm::translate(matrix, glm::vec3(3.0f, 0.0f, -1.0f));
     matrix = glm::rotate(matrix, time, glm::vec3(0.0f, 1.0f, 0.0f));
     matrix = glm::scale(matrix, glm::vec3(1.5f, 1.5f, 1.0f));
+
+    matrix = glm::scale(matrix, glm::vec3(SQUISH(4), SQUISH(4), 1.0f )); 
+
 
     glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
     glUniformMatrix4fv(glGetUniformLocation(shader, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
 
     // leftstar
+    matrix = glm::scale(matrix, glm::vec3(1/SQUISH(4), 1/SQUISH(4), 1.0f )); 
     matrix = glm::scale(matrix, glm::vec3(0.67f, 0.67f, 1.0f));
     matrix = glm::rotate(matrix, -time, glm::vec3(0.0f, 1.0f, 0.0f));
-    matrix = glm::translate(matrix, glm::vec3(-2.3f, 0.0f, 0.0f));
+    matrix = glm::translate(matrix, glm::vec3(-3.0f, 0.0f, 1.0f));
 
-    matrix = glm::translate(matrix, glm::vec3(-2.0f, 0.0f, 0.0f));
+    matrix = glm::translate(matrix, glm::vec3(-3.0f, 0.0f, -1.0f));
     matrix = glm::rotate(matrix, time, glm::vec3(1.0f, 0.0f, 0.0f));
     matrix = glm::scale(matrix, glm::vec3(1.0f, 0.5f, 1.0f));
+   
+    matrix = glm::scale(matrix, glm::vec3(SQUISH(0), 1.0f , SQUISH(0))); 
 
     glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
     glUniformMatrix4fv(glGetUniformLocation(shader, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
