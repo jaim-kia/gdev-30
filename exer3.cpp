@@ -1,3 +1,10 @@
+/*
+ *   Controls:
+ *       WASD: movement(W - forward, A - left, S - backward, D - right)
+ *       Mouse: move camera perspective
+ *       look up/down + W/S: go up or down
+ */
+
 /******************************************************************************
  * This demo draws a triangle by defining its vertices in 3 dimensions
  * (the 3rd dimension is currently ignored and is just set to 0).
@@ -28,7 +35,7 @@ float width = 1/3.5;
 // define a vertex array to hold our vertices
 
 #define YELLOW 1.0f, 1.0f, 0.2f
-#define GOLD 1.0f, 0.8431f, 0.0f
+#define GOLD 0.8f, 0.6431f, 0.0f
 #define LYELLOW 1.0f, 1.0f, 0.6f
 #define BLACK 0.0f, 0.0f, 0.0f
 
@@ -89,18 +96,18 @@ glm::vec3 sv_mid_zero = glm::vec3(0.0f, 0.3f, 0.4f);
 
 float vertices[] =
 {
-    // 10 triangles
+    // 30 triangles
     STAR_POINT(0, 0), STAR_POINT(1, 0), STAR_POINT(2, 0), STAR_POINT(3, 0), STAR_POINT(4, 0),
-    // 10 triangles
+    // 5 triangles
     INNER_STAR_POINTS(0, 0), INNER_STAR_POINTS(1, 0), INNER_STAR_POINTS(2, 0), INNER_STAR_POINTS(3, 0), INNER_STAR_POINTS(4, 0),
     // 5 triangles
     INNER_PENTAGON(0, 0), INNER_PENTAGON(1, 0), INNER_PENTAGON(2, 0), INNER_PENTAGON(3, 0), INNER_PENTAGON(4, 0),
     // 10 triangles
     FILLING(0, 0), FILLING(1, 0), FILLING(2, 0), FILLING(3, 0), FILLING(4, 0),
 
-    // 10 triangles
+    // 30 triangles
     STAR_POINT(0, PI), STAR_POINT(1, PI), STAR_POINT(2, PI), STAR_POINT(3, PI), STAR_POINT(4, PI),
-    // 10 triangels
+    // 5 triangels
     INNER_STAR_POINTS(0, PI), INNER_STAR_POINTS(1, PI), INNER_STAR_POINTS(2, PI), INNER_STAR_POINTS(3, PI), INNER_STAR_POINTS(4, PI),
     // 5 triangles
     INNER_PENTAGON(0, PI), INNER_PENTAGON(1, PI), INNER_PENTAGON(2, PI), INNER_PENTAGON(3, PI), INNER_PENTAGON(4, PI),
@@ -226,25 +233,27 @@ void render()
 
     // middle star
     matrix = glm::rotate(matrix, time, glm::vec3(0.0f, 0.0f, 1.0f));
-    // matrix = glm::scale(matrix, glm::vec3(1.0f, 1.0f, 1.0f));
     glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
     glUniformMatrix4fv(glGetUniformLocation(shader, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
 
     // rightstar    
-    matrix = glm::scale(matrix, glm::vec3(2.0, 2.0f, 1.0f));
     matrix = glm::rotate(matrix, -time, glm::vec3(0.0f, 0.0f, 1.0f));
-    matrix = glm::translate(matrix, glm::vec3(2.0f, 0.0f, 0.0f));
+
+    matrix = glm::scale(matrix, glm::vec3(2.0, 2.0f, 1.0f));
+    matrix = glm::translate(matrix, glm::vec3(1.3f, 0.0f, 0.0f));
     matrix = glm::rotate(matrix, time, glm::vec3(0.0f, 1.0f, 0.0f));
+
     glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
     glUniformMatrix4fv(glGetUniformLocation(shader, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
 
     // leftstar
-    // matrix = glm::scale(matrix, glm::vec3(0.5f, 0.5f, 1.0f));
     matrix = glm::rotate(matrix, -time, glm::vec3(0.0f, 1.0f, 0.0f));
-    matrix = glm::translate(matrix, glm::vec3(-2.0f, 0.0f, 0.0f));
+    matrix = glm::translate(matrix, glm::vec3(-1.3f, 0.0f, 0.0f));
+    matrix = glm::scale(matrix, glm::vec3(0.5f, 0.5f, 1.0f));
+
+    matrix = glm::scale(matrix, glm::vec3(1.0f, 0.5f, 1.0f));
     matrix = glm::translate(matrix, glm::vec3(-2.0f, 0.0f, 0.0f));
     matrix = glm::rotate(matrix, time, glm::vec3(1.0f, 0.0f, 0.0f));
-    // matrix = glm::scale(matrix, glm::vec3(0.5f, 0.5f, 2.0f));
     glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (8 * sizeof(float)));
     glUniformMatrix4fv(glGetUniformLocation(shader, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
 
