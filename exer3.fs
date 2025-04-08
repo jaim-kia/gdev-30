@@ -30,6 +30,4 @@ void main()
 
 
     fragmentColor = mix(maintex, rainbow, abs(sin(time*1.5)))*eyes;
-    // fragmentColor = maintex * rainbow;
-    // 1.0f is alpha here cause color, we need to specify what alpha means, so turning it rn to something else is useless
 }

@@ -357,15 +357,11 @@ int main(int argc, char** argv)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-    // int windowX = (mode->width - windowWidth) / 2;
-    // int windowY = (mode->height - windowHeight) / 2;
+
 
     // create a GLFW window with the specified width, height, and title
     pWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, NULL, NULL);
 
-    glfwSetWindowPos(pWindow, (mode->width - 640)/2, (mode->height - 360)/2);
     if (! pWindow)
     {
         // gracefully terminate if we cannot create the window
