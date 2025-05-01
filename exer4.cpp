@@ -158,11 +158,10 @@ void getNormal(float* verts, int count, int step){
             verts[(i + j) * step + 9] = normal.y ;
             verts[(i + j) * step + 10] = normal.z ;
         }
-
-        //Testing
-        // std::cout << normal.x << ", ";
-        // std::cout << normal.y << ", ";
-        // std::cout << normal.z << std::endl;
+         //Testing
+         // std::cout << normal.x << ", ";
+         // std::cout << normal.y << ", ";
+         // std::cout << normal.z << std::endl;
     }
 }
 
@@ -288,7 +287,7 @@ void render()
 
 
     glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
-    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (11 * sizeof(float)));
+    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
 
     // leftstar
