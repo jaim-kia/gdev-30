@@ -129,6 +129,10 @@ glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
 
+int step = 11; // position, color, texCoord, normal
+int vertexCount = sizeof(vertices)/ (step * sizeof(float));
+
+
 bool firstMouse = true;
 float yaw   = -90.0f;
 float pitch =  0.0f;
@@ -139,6 +143,28 @@ float fov   =  45.0f;
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
+void getNormal(float* verts, int count, int step){
+    for(int i = 0; i< count; i+=3){ //3 since 3 vertices
+        glm::vec3 A = glm::vec3(verts[i*step], verts[i*step + 1], verts[i*step +2]);
+        glm::vec3 B = glm::vec3(verts[(i + 1)*step], verts[(i + 1)*step + 1], verts[(i + 1)*step +2]);
+        glm::vec3 C = glm::vec3(verts[(i + 2)*step], verts[(i + 2)*step + 1], verts[(i + 2)*step +2]);
+
+        glm::vec3 U = B - A;
+        glm::vec3 V = C - A;
+        glm::vec3 normal = glm::normalize(glm::cross(U,V));
+
+        for(int j = 0; j < 3; ++j){
+            verts[(i + j) * step + 8] = normal.x ;
+            verts[(i + j) * step + 9] = normal.y ;
+            verts[(i + j) * step + 10] = normal.z ;
+        }
+
+         //Testing
+         // std::cout << normal.x << ", ";
+         // std::cout << normal.y << ", ";
+         // std::cout << normal.z << std::endl;
+    }
+}
 
 // called by the main function to do initial setup, such as uploading vertex
 // arrays, shader programs, etc.; returns true if successful, false otherwise
@@ -153,6 +179,7 @@ bool setup()
     glBindVertexArray(vao);
 
     // upload our vertex array data to the newly-created VBO
+    getNormal(vertices, vertexCount, step);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -258,7 +285,7 @@ void render()
 
 
     glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
-    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (11 * sizeof(float)));
+    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
 
     // leftstar
