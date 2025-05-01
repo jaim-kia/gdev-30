@@ -145,9 +145,9 @@ float lastFrame = 0.0f; // Time of last frame
 
 void getNormal(float* verts, int count, int step){
     for(int i = 0; i< count; i+=3){ //3 since 3 vertices
-        glm::vec3 A = glm::vec3(verts[i*step + 0], verts[i*step + 1], verts[i*step +2]);
-        glm::vec3 B = glm::vec3(verts[(i + 1)*step + 0], verts[(i + 1)*step + 1], verts[(i + 1)*step +2]);
-        glm::vec3 C = glm::vec3(verts[(i + 2)*step + 0], verts[(i + 2)*step + 1], verts[(i + 2)*step +2]);
+        glm::vec3 A = glm::vec3(verts[i*step], verts[i*step + 1], verts[i*step +2]);
+        glm::vec3 B = glm::vec3(verts[(i + 1)*step], verts[(i + 1)*step + 1], verts[(i + 1)*step +2]);
+        glm::vec3 C = glm::vec3(verts[(i + 2)*step], verts[(i + 2)*step + 1], verts[(i + 2)*step +2]);
 
         glm::vec3 U = B - A;
         glm::vec3 V = C - A;
@@ -158,6 +158,11 @@ void getNormal(float* verts, int count, int step){
             verts[(i + j) * step + 9] = normal.y ;
             verts[(i + j) * step + 10] = normal.z ;
         }
+
+        //Testing
+        // std::cout << normal.x << ", ";
+        // std::cout << normal.y << ", ";
+        // std::cout << normal.z << std::endl;
     }
 }
 
