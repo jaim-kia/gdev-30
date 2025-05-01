@@ -158,13 +158,13 @@ void getNormal(float* verts, int count, int step){
             verts[(i + j) * step + 9] = normal.y ;
             verts[(i + j) * step + 10] = normal.z ;
         }
-
          //Testing
          // std::cout << normal.x << ", ";
          // std::cout << normal.y << ", ";
          // std::cout << normal.z << std::endl;
     }
 }
+
 
 // called by the main function to do initial setup, such as uploading vertex
 // arrays, shader programs, etc.; returns true if successful, false otherwise
@@ -267,8 +267,10 @@ void render()
     // modelMatrix = glm::rotate(modelMatrix, time, glm::vec3(0.0f, 0.0f, 1.0f));
     // modelMatrix = glm::scale(modelMatrix, glm::vec3(SQUISH(2), SQUISH(2), SQUISH(2) )); 
     
+
     glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
     glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (11 * sizeof(float)));
+
 
 
     // rightstar    
