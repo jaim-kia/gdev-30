@@ -260,13 +260,18 @@ void render()
     projectionViewMatrix *= glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
     glUniformMatrix4fv(glGetUniformLocation(shader, "projectionViewMatrix"), 1, GL_FALSE, glm::value_ptr(projectionViewMatrix));
 
+
     glBindVertexArray(vao);
     // middle star
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, -1.0f));
-    // modelMatrix = glm::rotate(modelMatrix, time, glm::vec3(0.0f, 0.0f, 1.0f));
-    // modelMatrix = glm::scale(modelMatrix, glm::vec3(SQUISH(2), SQUISH(2), SQUISH(2) )); 
-    
+    modelMatrix = glm::rotate(modelMatrix, time, glm::vec3(0.0f, 0.0f, 1.0f));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(SQUISH(2), SQUISH(2), SQUISH(2) )); 
+
+    glm::mat4 normalMatrix;
+    normalMatrix = glm::transpose(glm::inverse(modelMatrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader, "normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
+
 
     glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
     glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (11 * sizeof(float)));
@@ -274,41 +279,41 @@ void render()
 
 
     // rightstar    
-    // modelMatrix = glm::scale(modelMatrix, glm::vec3(1/SQUISH(2), 1/SQUISH(2), 1/SQUISH(2) )); 
-    // modelMatrix = glm::rotate(modelMatrix, -time, glm::vec3(0.0f, 0.0f, 1.0f));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(1/SQUISH(2), 1/SQUISH(2), 1/SQUISH(2) )); 
+    modelMatrix = glm::rotate(modelMatrix, -time, glm::vec3(0.0f, 0.0f, 1.0f));
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 1.0f));
 
 
     modelMatrix = glm::translate(modelMatrix, glm::vec3(3.0f, 0.0f, -1.0f));
-    // modelMatrix = glm::rotate(modelMatrix, time, glm::vec3(0.0f, 1.0f, 0.0f));
-    // modelMatrix = glm::scale(modelMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
+    modelMatrix = glm::rotate(modelMatrix, time, glm::vec3(0.0f, 1.0f, 0.0f));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
 
-    // modelMatrix = glm::scale(modelMatrix, glm::vec3(SQUISH(4), SQUISH(4), 1.0f )); 
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(SQUISH(4), SQUISH(4), 1.0f )); 
 
+    normalMatrix = glm::transpose(glm::inverse(modelMatrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader, "normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
     glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
 
     // leftstar
-    // modelMatrix = glm::scale(modelMatrix, glm::vec3(1/SQUISH(4), 1/SQUISH(4), 1.0f )); 
-    // modelMatrix = glm::scale(modelMatrix, glm::vec3(0.67f, 0.67f, 1.0f));
-    // modelMatrix = glm::rotate(modelMatrix, -time, glm::vec3(0.0f, 1.0f, 0.0f));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(1/SQUISH(4), 1/SQUISH(4), 1.0f )); 
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(0.67f, 0.67f, 1.0f));
+    modelMatrix = glm::rotate(modelMatrix, -time, glm::vec3(0.0f, 1.0f, 0.0f));
     modelMatrix = glm::translate(modelMatrix, glm::vec3(-3.0f, 0.0f, 1.0f));
 
     modelMatrix = glm::translate(modelMatrix, glm::vec3(-3.0f, 0.0f, -1.0f));
-    // modelMatrix = glm::rotate(modelMatrix, time, glm::vec3(1.0f, 0.0f, 0.0f));
-    // modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 0.5f, 1.0f));
-   
-    // modelMatrix = glm::scale(modelMatrix, glm::vec3(SQUISH(0), 1.0f , SQUISH(0))); 
+    modelMatrix = glm::rotate(modelMatrix, time, glm::vec3(1.0f, 0.0f, 0.0f));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 0.5f, 1.0f));
 
-    glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
-    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (11 * sizeof(float)));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(SQUISH(0), 1.0f , SQUISH(0))); 
 
-    glm::mat4 normalMatrix;
     normalMatrix = glm::transpose(glm::inverse(modelMatrix));
     glUniformMatrix4fv(glGetUniformLocation(shader, "normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
+    glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (11 * sizeof(float)));
 
 
     glUniform1i(glGetUniformLocation(shader, "shaderTextureEyes"), 0);
