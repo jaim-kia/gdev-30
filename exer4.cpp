@@ -315,6 +315,7 @@ void render()
     glUniform1i(glGetUniformLocation(shader, "shaderRainbow"), 1);
 
     glUniform1f(glGetUniformLocation(shader, "time"), currentFrame);
+    glUniform3f(glGetUniformLocation(shader, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
 
     glEnable(GL_CULL_FACE);
 }
