@@ -27,8 +27,15 @@ vec2 rotate(vec2 v, float a){
 
 void main()
 {
-    vec3 lightPosition = vec3(0.0f, 0.0f, 5.0f);
+    // light position
+    vec2 lightPositionTwo = rotate(vec2(5.0f, 0.0f), time);
+
+    vec3 lightPosition = vec3(lightPositionTwo.x, lightPositionTwo.x, lightPositionTwo.y);
     vec3 lightVector = normalize(lightPosition - worldSpacePosition);
+    
+    // light color
+    vec3 lightColor = mix(vec3(1.0f, 1.0f, 1.0f), vec3(0.89f, 0.17f, 0.03f), (sin(2*time)+1)/2);
+
     // vec3 worldSpaceNormal = normalize((normalMatrix * vec4(worldSpaceNormal, 1.0f)).xyz);
     vec3 worldSpaceNormal = normalize(worldSpaceNormal);
 
@@ -39,17 +46,18 @@ void main()
 
     // spec
     vec3 refVector = reflect(-lightVector, worldSpaceNormal);
-    vec3 specular = pow(max(dot(refVector, normalize(cameraPos - worldSpacePosition)), 0), 4196) * vec3(1.0, 1.0, 1.0);
+    vec3 specular = pow(max(dot(refVector, normalize(cameraPos - worldSpacePosition)), 0), 4196) * lightColor;
 
     // diff
-    vec3 diffuseColor = objectColor * clamp(dot(lightVector, worldSpaceNormal), 0, 1) * vec3(1.0, 1.0, 1.0);
+    vec3 diffuseColor = objectColor * clamp(dot(lightVector, worldSpaceNormal), 0, 1) * lightColor;
     
-    vec3 ambientColor = vec3(0.63f, 0.43f, 0.05f);
+    vec3 ambientColor = objectColor * vec3(0.63f, 0.43f, 0.05f);
+    // vec3 ambientColor = vec3(0.63f, 0.43f, 0.05f);
 
     // vec3 finalColor = diffuseColor;
     vec3 finalColor = diffuseColor + specular + ambientColor;
     // vec3 finalColor = specular;
-   // vec3 finalColor = dot(refVector, cameraPos - worldSpacePosition) * vec3(1.0, 1.0, 1.0);
+    // vec3 finalColor = dot(refVector, cameraPos - worldSpacePosition) * vec3(1.0, 1.0, 1.0);
     vec4 maintex = vec4(finalColor, 1.0f);
 
     // fragmentColor = mix(maintex, rainbow, abs(sin(time*1.5)))*eyes;
