@@ -38,7 +38,7 @@ void main()
     vec3 lightColor = mix(vec3(1.0f, 1.0f, 1.0f), vec3(0.89f, 0.17f, 0.03f), (sin(2*time)+1)/2);
 
     // vec3 worldSpaceNormal = normalize((normalMatrix * vec4(worldSpaceNormal, 1.0f)).xyz);
-    vec3 worldSpaceNormal = normalize(worldSpaceNormal);
+    vec3 finalNormal = normalize(worldSpaceNormal);
 
     vec4 eyes = texture(shaderTextureEyes, shaderTexCoord);
 
@@ -46,11 +46,11 @@ void main()
     vec4 rainbow = texture(shaderRainbow, vec2(rotated_coords.x + time*2, rotated_coords.y + time));
 
     // spec
-    vec3 refVector = reflect(-lightVector, worldSpaceNormal);
+    vec3 refVector = reflect(-lightVector, finalNormal);
     vec3 specular = pow(max(dot(refVector, normalize(cameraPos - worldSpacePosition)), 0), specularity) * lightColor;
 
     // diff
-    vec3 diffuseColor = objectColor * clamp(dot(lightVector, worldSpaceNormal), 0, 1) * lightColor;
+    vec3 diffuseColor = objectColor * clamp(dot(lightVector, finalNormal), 0, 1) * lightColor;
     
     vec3 ambientColor = objectColor * vec3(0.63f, 0.43f, 0.05f);
     // vec3 ambientColor = vec3(0.63f, 0.43f, 0.05f);
