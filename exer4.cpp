@@ -132,6 +132,8 @@ glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
 int step = 11; // position, color, texCoord, normal
 int vertexCount = sizeof(vertices)/ (step * sizeof(float));
 
+// Specularity
+float specularity = 4096.0f;
 
 bool firstMouse = true;
 float yaw   = -90.0f;
@@ -320,6 +322,7 @@ void render()
     glUniform1i(glGetUniformLocation(shader, "shaderRainbow"), 1);
 
     glUniform1f(glGetUniformLocation(shader, "time"), currentFrame);
+    glUniform1f(glGetUniformLocation(shader, "specularity"), specularity);
     glUniform3f(glGetUniformLocation(shader, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
 
     glEnable(GL_CULL_FACE);
@@ -337,6 +340,10 @@ void processInput(GLFWwindow *window)
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+        specularity = specularity * 2;
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        specularity = specularity / 2;
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)

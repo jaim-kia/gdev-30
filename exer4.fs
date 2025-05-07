@@ -16,6 +16,7 @@ uniform sampler2D shaderTextureEyes;
 uniform sampler2D shaderRainbow;
 uniform mat4 normalMatrix;
 uniform float time;
+uniform float specularity;
 uniform vec3 cameraPos;
 
 out vec4 fragmentColor;
@@ -46,7 +47,7 @@ void main()
 
     // spec
     vec3 refVector = reflect(-lightVector, worldSpaceNormal);
-    vec3 specular = pow(max(dot(refVector, normalize(cameraPos - worldSpacePosition)), 0), 4196) * lightColor;
+    vec3 specular = pow(max(dot(refVector, normalize(cameraPos - worldSpacePosition)), 0), specularity) * lightColor;
 
     // diff
     vec3 diffuseColor = objectColor * clamp(dot(lightVector, worldSpaceNormal), 0, 1) * lightColor;
