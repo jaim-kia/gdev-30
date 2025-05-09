@@ -4,9 +4,9 @@
  *       Mouse: move camera perspective
  *       look up/down + W/S: go up or down
  *       1: white light
- *       2: light gray light
- *       3: dark gray light
- *       4: red light
+ *       2: red light
+ *       [: decrease brightness
+ *       ]: increase brightness
  *       <-: decrease specularity/shininess, divide by 2 per press and release (min 1.0f)
  *       ->: increase specularity/shininess, multiply by 2 per press and release (max 8192.0f)
  *   Note: Light position revolves around the origin, it is in fragment shader since time is already a uniform
@@ -143,11 +143,17 @@ int vertexCount = sizeof(vertices)/ (step * sizeof(float));
 float specularity = 4096.0f;
 
 // light color
-glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+int lightIndex = 3;
+glm::vec3 whiteLight[] = {glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.75f, 0.75f, 0.75f), glm::vec3(1.0f, 1.0f, 1.0f)};
+glm::vec3 redLight[] = {glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 0.0f, 0.0f), glm::vec3(0.5f, 0.0f, 0.0f), glm::vec3(0.75f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)};
+glm::vec3 currentLight[] = {glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.75f, 0.75f, 0.75f), glm::vec3(1.0f, 1.0f, 1.0f)};
+glm::vec3 lightColor = currentLight[lightIndex];
 
 bool firstMouse = true;
 bool leftKeyPressed = false;
 bool rightKeyPressed = false;
+bool leftBracketPressed = false;
+bool rightBracketPressed = false;
 float yaw   = -90.0f;
 float pitch =  0.0f;
 float lastX =  640 / 2.0;
@@ -386,15 +392,29 @@ void processInput(GLFWwindow *window)
         rightKeyPressed = true;
     } else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_RELEASE)
         rightKeyPressed = false;
-    
-    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-        lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
-    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-        lightColor = glm::vec3(0.5f, 0.5f, 0.5f);
-    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-        lightColor = glm::vec3(0.2f, 0.2f, 0.2f);
-    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
-        lightColor = glm::vec3(1.0f, 0.0f, 0.0f);
+
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+        for (int i = 0; i < 5; i++) currentLight[i] = whiteLight[i];
+        lightColor = currentLight[lightIndex];
+    }
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+        for (int i = 0; i < 5; i++) currentLight[i] = redLight[i];
+        lightColor = currentLight[lightIndex];
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS && !leftBracketPressed) {
+        lightIndex = glm::max(lightIndex - 1, 0);
+        lightColor = currentLight[lightIndex];
+        leftBracketPressed = true;
+    } else if (glfwGetKey(window, GLFW_KEY_LEFT_BRACKET) == GLFW_RELEASE)
+        leftBracketPressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS && !rightBracketPressed) {
+        lightIndex = glm::min(lightIndex + 1, 4);
+        lightColor = currentLight[lightIndex];
+        rightBracketPressed = true;
+    } else if (glfwGetKey(window, GLFW_KEY_RIGHT_BRACKET) == GLFW_RELEASE)
+        rightBracketPressed = false;
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
