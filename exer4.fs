@@ -17,6 +17,7 @@ uniform sampler2D shaderRainbow;
 uniform mat4 normalMatrix;
 uniform float time;
 uniform float specularity;
+uniform vec3 lightColor;
 uniform vec3 cameraPos;
 
 out vec4 fragmentColor;
@@ -31,36 +32,31 @@ void main()
     // light position
     vec2 lightPositionTwo = rotate(vec2(5.0f, 0.0f), time);
 
-    vec3 lightPosition = vec3(lightPositionTwo.x, lightPositionTwo.x, lightPositionTwo.y);
+    vec3 lightPosition = vec3(lightPositionTwo.x, 2, lightPositionTwo.y);
     vec3 lightVector = normalize(lightPosition - worldSpacePosition);
     
-    // light color
-    vec3 lightColor = mix(vec3(1.0f, 1.0f, 1.0f), vec3(0.89f, 0.17f, 0.03f), (sin(2*time)+1)/2);
-
-    // vec3 worldSpaceNormal = normalize((normalMatrix * vec4(worldSpaceNormal, 1.0f)).xyz);
+    // renormalizing to avoid interpolation
     vec3 finalNormal = normalize(worldSpaceNormal);
 
-    vec4 eyes = texture(shaderTextureEyes, shaderTexCoord);
-
+    // getting the color of the texture
+    vec3 eyes = texture(shaderTextureEyes, shaderTexCoord).xyz;
     vec2 rotated_coords = rotate(shaderTexCoord, 45*3.14159/180);
-    vec4 rainbow = texture(shaderRainbow, vec2(rotated_coords.x + time*2, rotated_coords.y + time));
+    vec3 rainbow = texture(shaderRainbow, vec2(rotated_coords.x + time*2, rotated_coords.y + time)).xyz;
 
-    // spec
+    vec3 objectColorFinal = mix(objectColor, rainbow, (sin(time)+1)/2)*eyes;
+
+    // specularity
     vec3 refVector = reflect(-lightVector, finalNormal);
     vec3 specular = pow(max(dot(refVector, normalize(cameraPos - worldSpacePosition)), 0), specularity) * lightColor;
 
-    // diff
-    vec3 diffuseColor = objectColor * clamp(dot(lightVector, finalNormal), 0, 1) * lightColor;
+    // diffuse
+    vec3 diffuseColor = objectColorFinal * max(dot(lightVector, finalNormal), 0) * lightColor;
     
-    vec3 ambientColor = objectColor * vec3(0.63f, 0.43f, 0.05f);
-    // vec3 ambientColor = vec3(0.63f, 0.43f, 0.05f);
+    // ambient
+    vec3 ambientColor = objectColorFinal * vec3(0.3f, 0.3f, 0.3f);
 
-    // vec3 finalColor = diffuseColor;
+    // output color
     vec3 finalColor = diffuseColor + specular + ambientColor;
-    // vec3 finalColor = specular;
-    // vec3 finalColor = dot(refVector, cameraPos - worldSpacePosition) * vec3(1.0, 1.0, 1.0);
     vec4 maintex = vec4(finalColor, 1.0f);
-
-    // fragmentColor = mix(maintex, rainbow, abs(sin(time*1.5)))*eyes;
     fragmentColor = maintex;
 }

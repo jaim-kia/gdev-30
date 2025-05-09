@@ -3,6 +3,13 @@
  *       WASD: movement(W - forward, A - left, S - backward, D - right)
  *       Mouse: move camera perspective
  *       look up/down + W/S: go up or down
+ *       1: white light
+ *       2: light gray light
+ *       3: dark gray light
+ *       4: red light
+ *       <-: decrease specularity/shininess, divide by 2 per press and release (min 1.0f)
+ *       ->: increase specularity/shininess, multiply by 2 per press and release (max 8192.0f)
+ *   Note: Light position revolves around the origin, it is in fragment shader since time is already a uniform
  */
 
 /******************************************************************************
@@ -27,7 +34,7 @@
 // change this to your desired window attributes
 #define WINDOW_WIDTH  640
 #define WINDOW_HEIGHT 360
-#define WINDOW_TITLE  "Hello 3D World"
+#define WINDOW_TITLE  "Hello 3D World with Lighting"
 GLFWwindow *pWindow;
 #define PI 3.14159
 #define SQUISH(offset) glm::clamp(2*sin(time + (PI/6) - offset*(PI/3)), 1.0, 2.0)
@@ -135,7 +142,12 @@ int vertexCount = sizeof(vertices)/ (step * sizeof(float));
 // Specularity
 float specularity = 4096.0f;
 
+// light color
+glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+
 bool firstMouse = true;
+bool leftKeyPressed = false;
+bool rightKeyPressed = false;
 float yaw   = -90.0f;
 float pitch =  0.0f;
 float lastX =  640 / 2.0;
@@ -146,7 +158,7 @@ float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
 void getNormal(float* verts, int count, int step){
-    for(int i = 0; i< count; i+=3){ //3 since 3 vertices
+    for(int i = 0; i < count; i += 3){ //3 since 3 vertices
         glm::vec3 A = glm::vec3(verts[i*step], verts[i*step + 1], verts[i*step +2]);
         glm::vec3 B = glm::vec3(verts[(i + 1)*step], verts[(i + 1)*step + 1], verts[(i + 1)*step +2]);
         glm::vec3 C = glm::vec3(verts[(i + 2)*step], verts[(i + 2)*step + 1], verts[(i + 2)*step +2]);
@@ -165,8 +177,34 @@ void getNormal(float* verts, int count, int step){
          // std::cout << normal.y << ", ";
          // std::cout << normal.z << std::endl;
     }
-}
 
+    for (int i = 0; i < count; i++) {
+        // vertex's position to compare
+        glm::vec3 currentVertex(verts[i * step], verts[i * step + 1], verts[i * step + 2]);
+        glm::vec3 totalNormal(0, 0, 0);
+        glm::vec3 finalNormal(0, 0, 0);
+        // vertices that share a position
+        int totalVertices = 0;
+        
+        for (int j = 0; j < count; j++) {
+            // vertex compared to current vertex
+            glm::vec3 compVertex(verts[j * step], verts[j * step + 1], verts[j * step + 2]);
+            // threshhold of considering "the same position"
+            if (glm::distance(currentVertex, compVertex) <= 0.001f) {
+                totalNormal += glm::vec3(verts[j * step + 8], verts[j * step + 9], verts[j * step + 10]);
+                totalVertices++;
+            }
+        }
+        
+        // average, normalize and set the normal to the vertex position compared
+        if (totalVertices > 0) {
+            finalNormal = glm::normalize(totalNormal / (float)totalVertices);
+            verts[i*step + 8] = finalNormal.x;
+            verts[i*step + 9] = finalNormal.y;
+            verts[i*step + 10] = finalNormal.z;
+        }
+    }
+}
 
 // called by the main function to do initial setup, such as uploading vertex
 // arrays, shader programs, etc.; returns true if successful, false otherwise
@@ -247,11 +285,6 @@ void render()
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
-    // matrix = glm::translate(matrix, glm::vec3(0.0f, 0.0f, -5.0f));
-    // matrix = glm::rotate(matrix, glm::radians(-90.0f),
-    // glm::vec3(1.0f, 0.0f, 0.0f));
-    // matrix = glm::scale(matrix, glm::vec3(5.0f, 5.0f, 1.0f));
-
     // ... draw our triangles
 
     glm::mat4 projectionViewMatrix;
@@ -323,6 +356,7 @@ void render()
 
     glUniform1f(glGetUniformLocation(shader, "time"), currentFrame);
     glUniform1f(glGetUniformLocation(shader, "specularity"), specularity);
+    glUniform3f(glGetUniformLocation(shader, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
     glUniform3f(glGetUniformLocation(shader, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
 
     glEnable(GL_CULL_FACE);
@@ -340,10 +374,27 @@ void processInput(GLFWwindow *window)
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-        specularity = specularity * 2;
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        specularity = specularity / 2;
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && !leftKeyPressed) {
+        specularity = glm::max(specularity / 2.0f, 1.0f);
+        leftKeyPressed = true;
+    } else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_RELEASE)
+        leftKeyPressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS && !rightKeyPressed) {
+        specularity = glm::min(specularity * 2.0f, 8192.0f);
+        rightKeyPressed = true;
+    } else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_RELEASE)
+        rightKeyPressed = false;
+    
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+        lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+        lightColor = glm::vec3(0.5f, 0.5f, 0.5f);
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+        lightColor = glm::vec3(0.2f, 0.2f, 0.2f);
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        lightColor = glm::vec3(1.0f, 0.0f, 0.0f);
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
