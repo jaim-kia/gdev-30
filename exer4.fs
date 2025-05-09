@@ -55,7 +55,7 @@ void main()
     // ambient
     vec3 ambientColor = objectColorFinal * vec3(0.3f, 0.3f, 0.3f);
 
-    // output color
+    // output color - objectColor was already multiplied to diffuse and ambient so we just add everything
     vec3 finalColor = diffuseColor + specular + ambientColor;
     vec4 maintex = vec4(finalColor, 1.0f);
     fragmentColor = maintex;
