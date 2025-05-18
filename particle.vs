@@ -1,14 +1,17 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aColor;
+layout (location = 1) in vec2 aTexCoord;
 
 out vec3 Color;
+out vec2 TexCoord;
 
 uniform mat4 projectionViewMatrix;
+uniform mat4 modelMatrix;
+uniform vec3 acolor;
 
 void main()
 {
-    Color = aColor;
-    gl_Position = projectionViewMatrix * vec4(aPos, 1.0);
-    gl_PointSize = 10.0;
+    Color = acolor;
+    TexCoord = aTexCoord;
+    gl_Position = projectionViewMatrix * modelMatrix * vec4(aPos, 1.0);
 }

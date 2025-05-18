@@ -27,8 +27,8 @@
 GLFWwindow *pWindow;
 #define PI 3.14159
 #define SQUISH(offset) glm::clamp(2*sin(time + (PI/6) - offset*(PI/3)), 1.0, 2.0)
-#define MAX_PARTICLES 500
-#define PARTICLE_LIFETIME 1.0f
+#define MAX_PARTICLES 100
+#define PARTICLE_LIFETIME 3.0f
 
 
 float width = 1/3.5;
@@ -122,7 +122,7 @@ float vertices[] =
 GLuint vao;         // vertex array object (stores the render state for our vertex array)
 GLuint vbo;         // vertex buffer object (reserves GPU memory for our vertex array)
 GLuint shader;      // combined vertex and fragment shader
-GLuint texture_eyes, texture_rainbow;
+GLuint texture_eyes, texture_rainbow, texture_fog;
 
 
 glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
@@ -159,6 +159,7 @@ float lastFrame = 0.0f; // Time of last frame
 GLuint particleVAO, particleVBO;
 GLuint particleShader;
 std::vector<float> particleVertices;
+const float PARTICLE_SIZE = 0.1f;
 
 struct Particle {
     glm::vec3 position;
@@ -166,6 +167,8 @@ struct Particle {
     glm::vec3 color;
     float life;
     float size;
+    float rotation;
+    float rotationSpeed;
 };
 
 std::vector<Particle> particles;
@@ -178,28 +181,27 @@ std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 
 // function for creating particles
 void createParticles(float currentTime) {
-    if (currentTime - lastParticleTime > 0.05f) {   // spawn particles every indicated difference
+    if (currentTime - lastParticleTime > 0.1f) {    // spawn particles every indicated difference
         lastParticleTime = currentTime;             // update the time when the lat particle was spawned
         
         // create n new particles
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 2; i++) {
             
             // if current vector size is less than indicated max size, spawn particle
             if (particles.size() < MAX_PARTICLES) {
                 Particle p;
-                p.position = glm::vec3(0.0f);
+                p.position = glm::vec3(0.0f, -0.5f, 0.0f);
                 p.velocity = glm::vec3(
                     distribution(generator),
                     distribution(generator),
                     distribution(generator)
-                ) * 2.0f;
-                p.color = glm::vec3(
-                    0.5f + distribution(generator) * 0.5f,
-                    0.5f + distribution(generator) * 0.5f,
-                    0.5f + distribution(generator) * 0.5f
-                );
+                ) * 1.0f;
+                float gray = 0.9f + distribution(generator) * 0.1f;
+                p.color = glm::vec3(gray);
                 p.life = PARTICLE_LIFETIME;
-                p.size = 0.1f + distribution(generator) * 0.1f;
+                p.size = PARTICLE_SIZE * (2.0f + distribution(generator) * 0.4f);
+                p.rotation = distribution(generator) * 2.0f * PI;
+                p.rotationSpeed = distribution(generator) * 2.0f;
 
                 // place at the end of the vector
                 particles.push_back(p);
@@ -214,7 +216,8 @@ void updateParticles(float deltaTime) {
         // if the particle is not dead, update the life, position and velocity
         particles[i].life -= deltaTime;
         particles[i].position += particles[i].velocity * deltaTime;
-        particles[i].velocity.y -= 9.8f * deltaTime; // Simple gravity
+        particles[i].velocity.y = deltaTime; // Simple gravity
+        particles[i].rotation += particles[i].rotationSpeed * deltaTime;
         
         // if the particle is dead, place it at the back and remove it from the vector particles
         // pop_back updates the particle.size
@@ -278,6 +281,58 @@ void getNormal(float* verts, int count, int step){
     }
 }
 
+// 3d particle
+float particleShape[] = {
+    // Front face
+    // Front face (facing +Z)
+    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(-1.0f),
+    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
+     1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+     1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+     1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(-1.0f),
+    
+    // Back face (facing -Z)
+     1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+     1.0f,  1.0f, -1.0f,  shift(1.0f), shift(1.0f),
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+     1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+    
+    // Left face (facing -X)
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+    -1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    -1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    -1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+    
+    // Right face (facing +X)
+     1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+     1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+     1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+     1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+     1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+     1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+    
+    // Top face (facing +Y)
+    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+     1.0f,  1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+     1.0f,  1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+     1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
+    
+    // Bottom face (facing -Y)
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
+     1.0f, -1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+     1.0f, -1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+     1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f)
+};
+
 // called by the main function to do initial setup, such as uploading vertex
 // arrays, shader programs, etc.; returns true if successful, false otherwise
 bool setup()
@@ -328,7 +383,9 @@ bool setup()
     texture_rainbow = gdevLoadTexture("texture_rainbow.png", GL_REPEAT, true, true);
     if (! texture_rainbow) return false;
 
-    glEnable(GL_PROGRAM_POINT_SIZE);
+    texture_fog = gdevLoadTexture("texture_fog.png", GL_REPEAT, true, true);
+    if (! texture_fog) return false;
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -342,11 +399,12 @@ bool setup()
 
     glBindVertexArray(particleVAO);
     glBindBuffer(GL_ARRAY_BUFFER, particleVBO);
-    
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(particleShape), particleShape, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     return true;
@@ -418,6 +476,13 @@ void render()
     // deltaTime so the update is consistent in all devices
     updateParticles(deltaTime);
 
+    glUseProgram(particleShader);
+    glUniformMatrix4fv(glGetUniformLocation(particleShader, "projectionViewMatrix"), 1, GL_FALSE, glm::value_ptr(projectionViewMatrix));
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_fog); // Or your particle texture
+    glUniform1i(glGetUniformLocation(particleShader, "particleTexture"), 0);
+
     // empty current vertex list
     particleVertices.clear();
 
@@ -426,27 +491,22 @@ void render()
 
         // for fading
         float lifeRatio = p.life / PARTICLE_LIFETIME;
-        
-        // add x y z poition from particles to particleVertices
-        particleVertices.push_back(p.position.x);
-        particleVertices.push_back(p.position.y);
-        particleVertices.push_back(p.position.z);
 
-        // fade to black
-        particleVertices.push_back(p.color.r * lifeRatio);
-        particleVertices.push_back(p.color.g * lifeRatio);
-        particleVertices.push_back(p.color.b * lifeRatio);
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, p.position);
+        model = glm::rotate(model, p.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(p.size * lifeRatio));
+        
+        glUniformMatrix4fv(glGetUniformLocation(particleShader, "modelMatrix"), 
+                        1, GL_FALSE, glm::value_ptr(model));
+        glUniform3f(glGetUniformLocation(particleShader, "acolor"), 
+                p.color.r * lifeRatio, 
+                p.color.g * lifeRatio, 
+                p.color.b * lifeRatio);
+        glBindVertexArray(particleVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
     }
 
-    // Draw particles
-    glUseProgram(particleShader);
-    glUniformMatrix4fv(glGetUniformLocation(particleShader, "projectionViewMatrix"), 1, GL_FALSE, glm::value_ptr(projectionViewMatrix));
-
-    glBindVertexArray(particleVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, particleVBO);
-    glBufferData(GL_ARRAY_BUFFER, particleVertices.size() * sizeof(float), particleVertices.data(), GL_STATIC_DRAW);
-    glDrawArrays(GL_POINTS, 0, particles.size());
-    
     glEnable(GL_CULL_FACE);
 }
 
