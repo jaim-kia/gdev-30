@@ -17,6 +17,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <gdev.h>
+#include <vector>
+#include <random>
 
 // change this to your desired window attributes
 #define WINDOW_WIDTH  640
@@ -25,6 +27,8 @@
 GLFWwindow *pWindow;
 #define PI 3.14159
 #define SQUISH(offset) glm::clamp(2*sin(time + (PI/6) - offset*(PI/3)), 1.0, 2.0)
+#define MAX_PARTICLES 500
+#define PARTICLE_LIFETIME 1.0f
 
 
 float width = 1/3.5;
@@ -152,6 +156,79 @@ float fov   =  45.0f;
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
+GLuint particleVAO, particleVBO;
+GLuint particleShader;
+std::vector<float> particleVertices;
+
+struct Particle {
+    glm::vec3 position;
+    glm::vec3 velocity;
+    glm::vec3 color;
+    float life;
+    float size;
+};
+
+std::vector<Particle> particles;
+float lastParticleTime = 0.0f;
+
+// using c++ random:
+std::default_random_engine generator;
+std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
+
+
+// function for creating particles
+void createParticles(float currentTime) {
+    if (currentTime - lastParticleTime > 0.05f) {   // spawn particles every indicated difference
+        lastParticleTime = currentTime;             // update the time when the lat particle was spawned
+        
+        // create n new particles
+        for (int i = 0; i < 5; i++) {
+            
+            // if current vector size is less than indicated max size, spawn particle
+            if (particles.size() < MAX_PARTICLES) {
+                Particle p;
+                p.position = glm::vec3(0.0f);
+                p.velocity = glm::vec3(
+                    distribution(generator),
+                    distribution(generator),
+                    distribution(generator)
+                ) * 2.0f;
+                p.color = glm::vec3(
+                    0.5f + distribution(generator) * 0.5f,
+                    0.5f + distribution(generator) * 0.5f,
+                    0.5f + distribution(generator) * 0.5f
+                );
+                p.life = PARTICLE_LIFETIME;
+                p.size = 0.1f + distribution(generator) * 0.1f;
+
+                // place at the end of the vector
+                particles.push_back(p);
+            }
+        }
+    }
+}
+
+void updateParticles(float deltaTime) {
+    for (size_t i = 0; i < particles.size(); ) {
+
+        // if the particle is not dead, update the life, position and velocity
+        particles[i].life -= deltaTime;
+        particles[i].position += particles[i].velocity * deltaTime;
+        particles[i].velocity.y -= 9.8f * deltaTime; // Simple gravity
+        
+        // if the particle is dead, place it at the back and remove it from the vector particles
+        // pop_back updates the particle.size
+        if (particles[i].life <= 0.0f) {
+            // Remove dead particles
+            particles[i] = particles.back();
+            particles.pop_back();
+        } else {
+            // if it is alive, move to the next index
+            i++;
+        }
+    }
+}
+
 void getNormal(float* verts, int count, int step){
     for(int i = 0; i < count; i += 3){ //3 since 3 vertices
         glm::vec3 A = glm::vec3(verts[i*step], verts[i*step + 1], verts[i*step +2]);
@@ -251,6 +328,27 @@ bool setup()
     texture_rainbow = gdevLoadTexture("texture_rainbow.png", GL_REPEAT, true, true);
     if (! texture_rainbow) return false;
 
+    glEnable(GL_PROGRAM_POINT_SIZE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // different set of shaders for particles
+    particleShader = gdevLoadShader("particle.vs", "particle.fs");
+    if (!particleShader) return false;
+
+    // vao and vbo of the particles
+    glGenVertexArrays(1, &particleVAO);
+    glGenBuffers(1, &particleVBO);
+
+    glBindVertexArray(particleVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, particleVBO);
+    
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
     return true;
 }
 
@@ -314,6 +412,41 @@ void render()
     glUniform3f(glGetUniformLocation(shader, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
     glUniform3f(glGetUniformLocation(shader, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
 
+    // create and update particles:
+    // time for difference
+    createParticles(time);
+    // deltaTime so the update is consistent in all devices
+    updateParticles(deltaTime);
+
+    // empty current vertex list
+    particleVertices.clear();
+
+    // each particle p in vector particles
+    for (const auto& p : particles) {
+
+        // for fading
+        float lifeRatio = p.life / PARTICLE_LIFETIME;
+        
+        // add x y z poition from particles to particleVertices
+        particleVertices.push_back(p.position.x);
+        particleVertices.push_back(p.position.y);
+        particleVertices.push_back(p.position.z);
+
+        // fade to black
+        particleVertices.push_back(p.color.r * lifeRatio);
+        particleVertices.push_back(p.color.g * lifeRatio);
+        particleVertices.push_back(p.color.b * lifeRatio);
+    }
+
+    // Draw particles
+    glUseProgram(particleShader);
+    glUniformMatrix4fv(glGetUniformLocation(particleShader, "projectionViewMatrix"), 1, GL_FALSE, glm::value_ptr(projectionViewMatrix));
+
+    glBindVertexArray(particleVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, particleVBO);
+    glBufferData(GL_ARRAY_BUFFER, particleVertices.size() * sizeof(float), particleVertices.data(), GL_STATIC_DRAW);
+    glDrawArrays(GL_POINTS, 0, particles.size());
+    
     glEnable(GL_CULL_FACE);
 }
 
