@@ -19,6 +19,7 @@
 #include <gdev.h>
 #include <vector>
 #include <random>
+#include <cmath>
 
 // change this to your desired window attributes
 #define WINDOW_WIDTH  640
@@ -27,8 +28,8 @@
 GLFWwindow *pWindow;
 #define PI 3.14159
 #define SQUISH(offset) glm::clamp(2*sin(time + (PI/6) - offset*(PI/3)), 1.0, 2.0)
-#define MAX_PARTICLES 100
-#define PARTICLE_LIFETIME 3.0f
+#define MAX_PARTICLES 500
+#define PARTICLE_LIFETIME 4.0f
 
 
 float width = 1/3.5;
@@ -166,6 +167,7 @@ struct Particle {
     glm::vec3 velocity;
     glm::vec3 color;
     float life;
+    float opacity;
     float size;
     float rotation;
     float rotationSpeed;
@@ -181,22 +183,26 @@ std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 
 // function for creating particles
 void createParticles(float currentTime) {
-    if (currentTime - lastParticleTime > 0.1f) {    // spawn particles every indicated difference
+    if (currentTime - lastParticleTime > 0.05f) {    // spawn particles every indicated difference
         lastParticleTime = currentTime;             // update the time when the lat particle was spawned
         
         // create n new particles
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 5; i++) {
             
             // if current vector size is less than indicated max size, spawn particle
             if (particles.size() < MAX_PARTICLES) {
                 Particle p;
-                p.position = glm::vec3(0.0f, -0.5f, 0.0f);
+
+                float theta = distribution(generator) * 2.0f * PI;
+                
+                p.position = glm::vec3(cos(theta), -0.5f, sin(theta));
                 p.velocity = glm::vec3(
                     distribution(generator),
                     distribution(generator),
                     distribution(generator)
-                ) * 1.0f;
+                ) * 0.3f;
                 float gray = 0.9f + distribution(generator) * 0.1f;
+                p.opacity = 0.7f + distribution(generator) * 0.3f;
                 p.color = glm::vec3(gray);
                 p.life = PARTICLE_LIFETIME;
                 p.size = PARTICLE_SIZE * (2.0f + distribution(generator) * 0.4f);
@@ -216,13 +222,13 @@ void updateParticles(float deltaTime) {
         // if the particle is not dead, update the life, position and velocity
         particles[i].life -= deltaTime;
         particles[i].position += particles[i].velocity * deltaTime;
-        particles[i].velocity.y = deltaTime; // Simple gravity
+        particles[i].velocity.y = 0;
         particles[i].rotation += particles[i].rotationSpeed * deltaTime;
         
         // if the particle is dead, place it at the back and remove it from the vector particles
+        // since we moved it to the back, we don't need to i++
         // pop_back updates the particle.size
         if (particles[i].life <= 0.0f) {
-            // Remove dead particles
             particles[i] = particles.back();
             particles.pop_back();
         } else {
@@ -283,54 +289,113 @@ void getNormal(float* verts, int count, int step){
 
 // 3d particle
 float particleShape[] = {
-    // Front face
+
     // Front face (facing +Z)
-    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(-1.0f),
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f),
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
     -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
-     1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
-     1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
-     1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f),
+    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
     -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(-1.0f),
-    
+
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f),
+    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(-1.0f),
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f),
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+
+
     // Back face (facing -Z)
-     1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
-     1.0f,  1.0f, -1.0f,  shift(1.0f), shift(1.0f),
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f),
     -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
-    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(1.0f),
+
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f),
+    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(1.0f),
+    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f),
+    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
     -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
-     1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
-    
+
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f),
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+
+
     // Left face (facing -X)
-    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
-    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
-    -1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
-    -1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f),
     -1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+    -1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f),
     -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
-    
+    -1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f),
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f),
+    -1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+
+
     // Right face (facing +X)
-     1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
-     1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
-     1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
-     1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
-     1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
-     1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
-    
-    // Top face (facing +Y)
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f),
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f),
+    1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f),
+    1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+    1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f),
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+    1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+
+
+    // // Top face (facing +Y)
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f),
     -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f),
     -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
-     1.0f,  1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
-     1.0f,  1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
-     1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
     -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
-    
+
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f),
+    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f),
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+
+
     // Bottom face (facing -Y)
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f),
+    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f),
     -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f),
     -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
-     1.0f, -1.0f,  1.0f,  shift(1.0f), shift(1.0f),
-     1.0f, -1.0f,  1.0f,  shift(1.0f), shift(1.0f),
-     1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
-    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f)
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f),
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
 };
 
 // called by the main function to do initial setup, such as uploading vertex
@@ -450,7 +515,7 @@ void render()
     glBindVertexArray(vao);
     // middle star
     glm::mat4 modelMatrix = glm::mat4(1.0f);
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, -1.0f));
+    // modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, -1.0f));
 
     glm::mat4 normalMatrix;
     normalMatrix = glm::transpose(glm::inverse(modelMatrix));
@@ -491,7 +556,9 @@ void render()
 
         // for fading
         float lifeRatio = p.life / PARTICLE_LIFETIME;
+        float currentOpacity = p.opacity * lifeRatio;  // Fade from initial alpha to 0
 
+        glUniform1f(glGetUniformLocation(particleShader, "opacity"), currentOpacity);
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, p.position);
         model = glm::rotate(model, p.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -500,11 +567,11 @@ void render()
         glUniformMatrix4fv(glGetUniformLocation(particleShader, "modelMatrix"), 
                         1, GL_FALSE, glm::value_ptr(model));
         glUniform3f(glGetUniformLocation(particleShader, "acolor"), 
-                p.color.r * lifeRatio, 
-                p.color.g * lifeRatio, 
-                p.color.b * lifeRatio);
+                p.color.r, 
+                p.color.g, 
+                p.color.b);
         glBindVertexArray(particleVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawArrays(GL_TRIANGLES, 0, sizeof(particleShape) / (5 * sizeof(float)));
     }
 
     glEnable(GL_CULL_FACE);
