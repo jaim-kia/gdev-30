@@ -175,12 +175,15 @@ struct Particle {
 
 std::vector<Particle> fogParticles;
 std::vector<Particle> sparkleParticles;
+std::vector<glm::vec3> sparkleSpawn(5, glm::vec3(0.0f, 0.0f, 0.0f));;
 float lastFogParticleTime = 0.0f;
 float lastSparkleParticleTime = 0.0f;
+float fogScale = 2.0f;
 
 // using c++ random:
 std::default_random_engine generator;
 std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
+std::uniform_int_distribution<int> spawnDist(0, sparkleSpawn.size() - 1);
 
 
 // function for creating particles
@@ -656,19 +659,29 @@ void render()
         // float moveY = -pow((0.4 * moveX - 1), 2) + 1;
         // modelMatrix = glm::translate(modelMatrix, glm::vec3(moveX, moveY, 0));
 
+        fogScale = glm::min(2.0f + currentTime, 4.0f);
+
         for (int i = 0; i < 5; i ++) {
             glm::mat4 modelMatrix = glm::mat4(1.0f);
             glm::mat4 testMat = glm::mat4(1.0f);
             float moveX = glm::min(currentTime * 3.0f, 5.0f);
             float moveY = -pow((0.4 * moveX - 1), 2) + 1;
             
+            modelMatrix = glm::scale(modelMatrix, glm::vec3(glm::min(currentTime * 2.0f, 1.0f)));
+
             glm::vec4 movement = glm::vec4(moveX, moveY, 0.0f, 1.0f);
             testMat = glm::rotate(modelMatrix, i * glm::radians(-72.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             movement = movement * testMat;
 
+            sparkleSpawn[i] = glm::vec3(movement.x, movement.y, movement.z);
+
+            modelMatrix = glm::rotate(modelMatrix, sin(currentTime)/2, glm::vec3(movement.x, movement.y, movement.z));
+            modelMatrix = glm::rotate(modelMatrix, sin(-currentTime)/4, glm::vec3(0, 1, 0));
+
             modelMatrix = glm::translate(modelMatrix, glm::vec3(movement.x, movement.y, movement.z));
             modelMatrix = glm::rotate(modelMatrix, (i + 5) * glm::radians(72.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             modelMatrix = glm::rotate(modelMatrix, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
 
             glm::mat4 normalMatrix;
             normalMatrix = glm::transpose(glm::inverse(modelMatrix));
@@ -694,10 +707,10 @@ void render()
     float theta = distribution(generator) * 2.0f * PI;
     float opacity = 0.7f + distribution(generator) * 0.3f;
     glm::vec3 color = glm::vec3(0.9f + distribution(generator) * 0.1f);
-    glm::vec3 spawn = glm::vec3(2*cos(theta), -0.5f, 2*sin(theta));
+    glm::vec3 spawn = glm::vec3(fogScale * cos(theta), -1.0f, fogScale * sin(theta));
 
     createParticles(fogParticles, lastFogParticleTime, time, 500, 0.3f, opacity, color, spawn);
-    createParticles(sparkleParticles, lastSparkleParticleTime, time, 10, 1.0f, 1.0f, color, glm::vec3(0,0,0));
+    createParticles(sparkleParticles, lastSparkleParticleTime, time, 50, 1.0f, 1.0f, color, sparkleSpawn[spawnDist(generator)]);
 
     // deltaTime so the update is consistent in all devices
     updateParticles(fogParticles, deltaTime, false);
