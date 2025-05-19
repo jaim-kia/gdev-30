@@ -28,7 +28,7 @@
 GLFWwindow *pWindow;
 #define PI 3.14159
 #define SQUISH(offset) glm::clamp(2*sin(time + (PI/6) - offset*(PI/3)), 1.0, 2.0)
-#define MAX_PARTICLES 500
+// #define MAX_PARTICLES 500
 #define PARTICLE_LIFETIME 4.0f
 
 
@@ -123,7 +123,7 @@ float vertices[] =
 GLuint vao;         // vertex array object (stores the render state for our vertex array)
 GLuint vbo;         // vertex buffer object (reserves GPU memory for our vertex array)
 GLuint shader;      // combined vertex and fragment shader
-GLuint texture_eyes, texture_rainbow, texture_fog;
+GLuint texture_eyes, texture_rainbow, texture_fog, texture_sparkle;
 
 
 glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
@@ -158,6 +158,7 @@ float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
 GLuint particleVAO, particleVBO;
+GLuint particleSparkleVAO, particleSparkleVBO;
 GLuint particleShader;
 const float PARTICLE_SIZE = 0.1f;
 
@@ -173,7 +174,9 @@ struct Particle {
 };
 
 std::vector<Particle> fogParticles;
-float lastParticleTime = 0.0f;
+std::vector<Particle> sparkleParticles;
+float lastFogParticleTime = 0.0f;
+float lastSparkleParticleTime = 0.0f;
 
 // using c++ random:
 std::default_random_engine generator;
@@ -181,15 +184,15 @@ std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 
 
 // function for creating particles
-void createParticles(std::vector<Particle>& particles, float currentTime, float opacity, glm::vec3 color, glm::vec3 spawn) {
+void createParticles(std::vector<Particle>& particles, float& lastParticleTime, float currentTime, int max_particles, float multiplier, float opacity, glm::vec3 color, glm::vec3 spawn) {
     if (currentTime - lastParticleTime > 0.05f) {    // spawn particles every indicated difference
-        lastParticleTime = currentTime;             // update the time when the lat particle was spawned
+        lastParticleTime = currentTime;             // update the time when the last particle was spawned
         
         // create n new particles
         for (int i = 0; i < 5; i++) {
             
             // if current vector size is less than indicated max size, spawn particle
-            if (particles.size() < MAX_PARTICLES) {
+            if ((int) particles.size() < max_particles) {
                 Particle p;
 
 
@@ -198,7 +201,7 @@ void createParticles(std::vector<Particle>& particles, float currentTime, float 
                     distribution(generator),
                     distribution(generator),
                     distribution(generator)
-                ) * 0.3f;
+                ) * multiplier;
                 // float gray = 0.9f + distribution(generator) * 0.1f;
                 p.opacity = opacity;
                 p.color = color;
@@ -214,13 +217,15 @@ void createParticles(std::vector<Particle>& particles, float currentTime, float 
     }
 }
 
-void updateParticles(std::vector<Particle>& particles, float deltaTime) {
+void updateParticles(std::vector<Particle>& particles, float deltaTime, bool enableY) {
     for (size_t i = 0; i < particles.size(); ) {
 
         // if the particle is not dead, update the life, position and velocity
         particles[i].life -= deltaTime;
         particles[i].position += particles[i].velocity * deltaTime;
-        particles[i].velocity.y = 0;
+        if (!enableY) {
+            particles[i].velocity.y = 0;
+        }
         particles[i].rotation += particles[i].rotationSpeed * deltaTime;
         
         // if the particle is dead, place it at the back and remove it from the vector particles
@@ -396,6 +401,116 @@ float particleShape[] = {
     -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
 };
 
+// sparkle particle
+float particleSparkleShape[] = {
+
+    // Front face (facing +Z)
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    0.5f,  0.5f,  0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+    -0.5f,  0.5f,  0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    -0.5f,  0.5f,  0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+    -0.5f, -0.5f,  0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    -0.5f, -0.5f,  0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+    0.5f, -0.5f,  0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    0.5f, -0.5f,  0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+    0.5f,  0.5f,  0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+
+
+    // Back face (facing -Z)
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    -0.5f,  0.5f, -0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+    0.5f,  0.5f, -0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    0.5f,  0.5f, -0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+    0.5f, -0.5f, -0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    0.5f, -0.5f, -0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+    -0.5f, -0.5f, -0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    -0.5f, -0.5f, -0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+    -0.5f,  0.5f, -0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+
+
+    // Left face (facing -X)
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f), 0, 1, 0,
+    -0.5f, -0.5f,  0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+    -0.5f,  0.5f,  0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f), 0, 1, 0,
+    -0.5f, -0.5f, -0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+    -0.5f, -0.5f,  0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f), 0, 1, 0,
+    -0.5f,  0.5f, -0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+    -0.5f, -0.5f, -0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f), 0, 1, 0,
+    -0.5f,  0.5f,  0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+    -0.5f,  0.5f, -0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+
+
+    // Right face (facing +X)
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f), 0, 1, 0,
+    0.5f,  0.5f,  0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+    0.5f, -0.5f,  0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f), 0, 1, 0,
+    0.5f,  0.5f, -0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+    0.5f,  0.5f,  0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f), 0, 1, 0,
+    0.5f, -0.5f, -0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+    0.5f,  0.5f, -0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f), 0, 1, 0,
+    0.5f, -0.5f,  0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+    0.5f, -0.5f, -0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+
+
+    // // Top face (facing +Y)
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f), 0, 1, 0,
+    -0.5f,  0.5f,  0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+    0.5f,  0.5f,  0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f), 0, 1, 0,
+    -0.5f,  0.5f, -0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+    -0.5f,  0.5f,  0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f), 0, 1, 0,
+    0.5f,  0.5f, -0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+    -0.5f,  0.5f, -0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f), 0, 1, 0,
+    0.5f,  0.5f,  0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+    0.5f,  0.5f, -0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+
+
+    // Bottom face (facing -Y)
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f), 0, 1, 0,
+    0.5f, -0.5f, -0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+    0.5f, -0.5f,  0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f), 0, 1, 0,
+    -0.5f, -0.5f, -0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+    0.5f, -0.5f, -0.5f,  shift(0.5f), shift(-0.5f), 0, 1, 0,
+
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f), 0, 1, 0,
+    -0.5f, -0.5f,  0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+    -0.5f, -0.5f, -0.5f,  shift(-0.5f), shift(-0.5f), 0, 1, 0,
+
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f), 0, 1, 0,
+    0.5f, -0.5f,  0.5f,  shift(0.5f), shift(0.5f), 0, 1, 0,
+    -0.5f, -0.5f,  0.5f,  shift(-0.5f), shift(0.5f), 0, 1, 0,
+};
 // called by the main function to do initial setup, such as uploading vertex
 // arrays, shader programs, etc.; returns true if successful, false otherwise
 bool setup()
@@ -450,6 +565,9 @@ bool setup()
     texture_fog = gdevLoadTexture("texture_fog.png", GL_REPEAT, true, true);
     if (! texture_fog) return false;
 
+    texture_sparkle = gdevLoadTexture("texture_sparkle.png", GL_REPEAT, true, true);
+    if (! texture_sparkle) return false;
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -464,6 +582,23 @@ bool setup()
     glBindVertexArray(particleVAO);
     glBindBuffer(GL_ARRAY_BUFFER, particleVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(particleShape), particleShape, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    // sparkles
+    glGenVertexArrays(1, &particleSparkleVAO);
+    glGenBuffers(1, &particleSparkleVBO);
+
+    glBindVertexArray(particleSparkleVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, particleSparkleVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(particleSparkleShape), particleSparkleShape, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -530,7 +665,7 @@ void render()
     glUniform3f(glGetUniformLocation(shader, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
 
 
-    // ------------------------ particles: fog ------------------------
+    // ------------------------ particles ------------------------
 
     // create and update particles:
     // time for difference
@@ -539,9 +674,12 @@ void render()
     glm::vec3 color = glm::vec3(0.9f + distribution(generator) * 0.1f);
     glm::vec3 spawn = glm::vec3(2*cos(theta), -0.5f, 2*sin(theta));
 
-    createParticles(fogParticles, time, opacity, color, spawn);
+    createParticles(fogParticles, lastFogParticleTime, time, 500, 0.3f, opacity, color, spawn);
+    createParticles(sparkleParticles, lastSparkleParticleTime, time, 10, 1.0f, 1.0f, color, glm::vec3(0,0,0));
+
     // deltaTime so the update is consistent in all devices
-    updateParticles(fogParticles, deltaTime);
+    updateParticles(fogParticles, deltaTime, false);
+    updateParticles(sparkleParticles, deltaTime, true);
 
     glUseProgram(particleShader);
     glUniformMatrix4fv(glGetUniformLocation(particleShader, "projectionViewMatrix"), 1, GL_FALSE, glm::value_ptr(projectionViewMatrix));
@@ -552,7 +690,6 @@ void render()
     glUniform1i(glGetUniformLocation(particleShader, "particleTexture"), 0);
     glUniform1f(glGetUniformLocation(particleShader, "time"), currentFrame);
     glUniform3f(glGetUniformLocation(particleShader, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
-
 
     // render particles
     for (const auto& p : fogParticles) {
@@ -578,6 +715,35 @@ void render()
                 p.color.b);
         glBindVertexArray(particleVAO);
         glDrawArrays(GL_TRIANGLES, 0, sizeof(particleShape) / (8 * sizeof(float)));
+    }
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_sparkle); // sparkle particle texture
+    glUniform1i(glGetUniformLocation(particleShader, "particleTexture"), 0);
+
+    for (const auto& p : sparkleParticles) {
+
+        // for fading
+        float lifeRatio = p.life / PARTICLE_LIFETIME;
+        float currentOpacity = p.opacity * lifeRatio;  // Fade from initial alpha to 0
+
+        glUniform1f(glGetUniformLocation(particleShader, "opacity"), currentOpacity);
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, p.position);
+        model = glm::rotate(model, p.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(p.size * lifeRatio));
+        
+        glUniformMatrix4fv(glGetUniformLocation(particleShader, "modelMatrix"), 
+                        1, GL_FALSE, glm::value_ptr(model));
+        normalMatrix = glm::transpose(glm::inverse(model));
+        glUniformMatrix4fv(glGetUniformLocation(particleShader, "normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
+
+        glUniform3f(glGetUniformLocation(particleShader, "acolor"), 
+                p.color.r, 
+                p.color.g, 
+                p.color.b);
+        glBindVertexArray(particleSparkleVAO);
+        glDrawArrays(GL_TRIANGLES, 0, sizeof(particleSparkleShape) / (8 * sizeof(float)));
     }
 
     glEnable(GL_CULL_FACE);
