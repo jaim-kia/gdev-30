@@ -195,7 +195,7 @@ void createParticles(float currentTime) {
 
                 float theta = distribution(generator) * 2.0f * PI;
                 
-                p.position = glm::vec3(cos(theta), -0.5f, sin(theta));
+                p.position = glm::vec3(2*cos(theta), -0.5f, 2*sin(theta));
                 p.velocity = glm::vec3(
                     distribution(generator),
                     distribution(generator),
@@ -249,9 +249,9 @@ void getNormal(float* verts, int count, int step){
         glm::vec3 normal = glm::normalize(glm::cross(U,V));
 
         for(int j = 0; j < 3; ++j){
-            verts[(i + j) * step + 8] = normal.x ;
-            verts[(i + j) * step + 9] = normal.y ;
-            verts[(i + j) * step + 10] = normal.z ;
+            verts[(i + j) * step + (step-3)] = normal.x ;
+            verts[(i + j) * step + (step-2)] = normal.y ;
+            verts[(i + j) * step + (step-1)] = normal.z ;
         }
          //Testing
          // std::cout << normal.x << ", ";
@@ -272,7 +272,7 @@ void getNormal(float* verts, int count, int step){
             glm::vec3 compVertex(verts[j * step], verts[j * step + 1], verts[j * step + 2]);
             // threshhold of considering "the same position"
             if (glm::distance(currentVertex, compVertex) <= 0.001f) {
-                totalNormal += glm::vec3(verts[j * step + 8], verts[j * step + 9], verts[j * step + 10]);
+                totalNormal += glm::vec3(verts[j * step + (step-3)], verts[j * step + (step-2)], verts[j * step + (step-1)]);
                 totalVertices++;
             }
         }
@@ -280,9 +280,9 @@ void getNormal(float* verts, int count, int step){
         // average, normalize and set the normal to the vertex position compared
         if (totalVertices > 0) {
             finalNormal = glm::normalize(totalNormal / (float)totalVertices);
-            verts[i*step + 8] = finalNormal.x;
-            verts[i*step + 9] = finalNormal.y;
-            verts[i*step + 10] = finalNormal.z;
+            verts[i*step + (step-3)] = finalNormal.x;
+            verts[i*step + (step-2)] = finalNormal.y;
+            verts[i*step + (step-1)] = finalNormal.z;
         }
     }
 }
@@ -291,111 +291,111 @@ void getNormal(float* verts, int count, int step){
 float particleShape[] = {
 
     // Front face (facing +Z)
-    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f),
-    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
-    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
+    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
 
-    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f),
-    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
-    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(-1.0f),
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
+    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
 
-    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f),
-    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(-1.0f),
-    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
 
-    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f),
-    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
-    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    0.0f,  0.0f,  2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
 
 
     // Back face (facing -Z)
-    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f),
-    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
-    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(1.0f),
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
+    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
 
-    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f),
-    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(1.0f),
-    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
+    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
 
-    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f),
-    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
-    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
 
-    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f),
-    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
-    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+    0.0f, 0.0f, -2.0f,  shift(0.0f), shift(0.0f), 0, 1, 0,
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
 
 
     // Left face (facing -X)
-    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f),
-    -1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
-    -1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f), 0, 1, 0,
+    -1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
+    -1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
 
-    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f),
-    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
-    -1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f), 0, 1, 0,
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
+    -1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
 
-    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f),
-    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
-    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f), 0, 1, 0,
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
 
-    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f),
-    -1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
-    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+    -2.0f,  0.0f,  0.0f,  shift(-2.0f), shift(0.0f), 0, 1, 0,
+    -1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
 
 
     // Right face (facing +X)
-    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f),
-    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
-    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f), 0, 1, 0,
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
 
-    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f),
-    1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
-    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f), 0, 1, 0,
+    1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
 
-    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f),
-    1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
-    1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f),
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f), 0, 1, 0,
+    1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
+    1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
 
-    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f),
-    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f),
-    1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+    2.0f,  0.0f,  0.0f,  shift(2.0f), shift(0.0f), 0, 1, 0,
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
+    1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
 
 
     // // Top face (facing +Y)
-    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f),
-    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
-    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f), 0, 1, 0,
+    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
 
-    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f),
-    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
-    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f), 0, 1, 0,
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
+    -1.0f,  1.0f,  1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
 
-    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f),
-    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
-    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f), 0, 1, 0,
+    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
+    -1.0f,  1.0f, -1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
 
-    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f),
-    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f),
-    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+    0.0f,  2.0f,  0.0f,  shift(0.0f), shift(2.0f), 0, 1, 0,
+    1.0f,  1.0f,  1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
+    1.0f,  1.0f, -1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
 
 
     // Bottom face (facing -Y)
-    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f),
-    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
-    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(1.0f),
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f), 0, 1, 0,
+    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
 
-    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f),
-    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
-    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f),
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f), 0, 1, 0,
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
+    1.0f, -1.0f, -1.0f,  shift(1.0f), shift(-1.0f), 0, 1, 0,
 
-    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f),
-    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
-    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f),
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f), 0, 1, 0,
+    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
+    -1.0f, -1.0f, -1.0f,  shift(-1.0f), shift(-1.0f), 0, 1, 0,
 
-    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f),
-    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(1.0f),
-    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(1.0f),
+    0.0f,  -2.0f,  0.0f,  shift(0.0f), shift(-2.0f), 0, 1, 0,
+    1.0f, -1.0f,  1.0f,  shift(1.0f), shift(1.0f), 0, 1, 0,
+    -1.0f, -1.0f,  1.0f,  shift(-1.0f), shift(1.0f), 0, 1, 0,
 };
 
 // called by the main function to do initial setup, such as uploading vertex
@@ -412,6 +412,7 @@ bool setup()
 
     // upload our vertex array data to the newly-created VBO
     getNormal(vertices, vertexCount, step);
+    getNormal(particleShape, sizeof(particleShape)/ (8 * sizeof(float)), 8);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -466,11 +467,14 @@ bool setup()
     glBindBuffer(GL_ARRAY_BUFFER, particleVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(particleShape), particleShape, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     return true;
 }
@@ -535,6 +539,8 @@ void render()
     glUniform3f(glGetUniformLocation(shader, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
     glUniform3f(glGetUniformLocation(shader, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
 
+
+
     // create and update particles:
     // time for difference
     createParticles(time);
@@ -545,8 +551,11 @@ void render()
     glUniformMatrix4fv(glGetUniformLocation(particleShader, "projectionViewMatrix"), 1, GL_FALSE, glm::value_ptr(projectionViewMatrix));
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_fog); // Or your particle texture
+    glBindTexture(GL_TEXTURE_2D, texture_fog); // particle texture
     glUniform1i(glGetUniformLocation(particleShader, "particleTexture"), 0);
+
+    glUniform1f(glGetUniformLocation(particleShader, "time"), currentFrame);
+    glUniform3f(glGetUniformLocation(particleShader, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
 
     // empty current vertex list
     particleVertices.clear();
@@ -566,12 +575,15 @@ void render()
         
         glUniformMatrix4fv(glGetUniformLocation(particleShader, "modelMatrix"), 
                         1, GL_FALSE, glm::value_ptr(model));
+        normalMatrix = glm::transpose(glm::inverse(model));
+        glUniformMatrix4fv(glGetUniformLocation(particleShader, "normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
+
         glUniform3f(glGetUniformLocation(particleShader, "acolor"), 
                 p.color.r, 
                 p.color.g, 
                 p.color.b);
         glBindVertexArray(particleVAO);
-        glDrawArrays(GL_TRIANGLES, 0, sizeof(particleShape) / (5 * sizeof(float)));
+        glDrawArrays(GL_TRIANGLES, 0, sizeof(particleShape) / (8 * sizeof(float)));
     }
 
     glEnable(GL_CULL_FACE);
