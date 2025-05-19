@@ -159,7 +159,6 @@ float lastFrame = 0.0f; // Time of last frame
 
 GLuint particleVAO, particleVBO;
 GLuint particleShader;
-std::vector<float> particleVertices;
 const float PARTICLE_SIZE = 0.1f;
 
 struct Particle {
@@ -481,31 +480,25 @@ bool setup()
 // called by the main function to do rendering per frame
 void render()
 {
-
-
     // clear the whole frame
     glClearColor(0.0f, 0.0f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // using our shader program...
     glUseProgram(shader);
-
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_eyes);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture_rainbow);
 
-
     glEnable(GL_DEPTH_TEST);
-    // glm::mat4 matrix;
 
     float currentFrame = glfwGetTime();
     float time = currentFrame;
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
-    // ... draw our triangles
-
+    // ------------------------ stars ------------------------
     glm::mat4 projectionViewMatrix;
     projectionViewMatrix = glm::perspective(glm::radians(60.0f), 
                             (float) WINDOW_WIDTH / WINDOW_HEIGHT,
@@ -528,8 +521,6 @@ void render()
     glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
     glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (11 * sizeof(float)));
 
-
-
     glUniform1i(glGetUniformLocation(shader, "shaderTextureEyes"), 0);
     glUniform1i(glGetUniformLocation(shader, "shaderRainbow"), 1);
 
@@ -539,6 +530,7 @@ void render()
     glUniform3f(glGetUniformLocation(shader, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
 
 
+    // ------------------------ particles: fog ------------------------
 
     // create and update particles:
     // time for difference
@@ -556,15 +548,13 @@ void render()
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_fog); // particle texture
-    glUniform1i(glGetUniformLocation(particleShader, "particleTexture"), 0);
 
+    glUniform1i(glGetUniformLocation(particleShader, "particleTexture"), 0);
     glUniform1f(glGetUniformLocation(particleShader, "time"), currentFrame);
     glUniform3f(glGetUniformLocation(particleShader, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
 
-    // empty current vertex list
-    particleVertices.clear();
 
-    // each particle p in vector particles
+    // render particles
     for (const auto& p : fogParticles) {
 
         // for fading
