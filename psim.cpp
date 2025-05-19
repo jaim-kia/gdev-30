@@ -28,7 +28,6 @@
 GLFWwindow *pWindow;
 #define PI 3.14159
 #define SQUISH(offset) glm::clamp(2*sin(time + (PI/6) - offset*(PI/3)), 1.0, 2.0)
-// #define MAX_PARTICLES 500
 #define PARTICLE_LIFETIME 4.0f
 
 
@@ -148,6 +147,7 @@ bool leftKeyPressed = false;
 bool rightKeyPressed = false;
 bool leftBracketPressed = false;
 bool rightBracketPressed = false;
+bool startAnim = false;
 float yaw   = -90.0f;
 float pitch =  0.0f;
 float lastX =  640 / 2.0;
@@ -645,16 +645,38 @@ void render()
 
     glBindVertexArray(vao);
     // middle star
-    glm::mat4 modelMatrix = glm::mat4(1.0f);
     // modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, -1.0f));
 
-    glm::mat4 normalMatrix;
-    normalMatrix = glm::transpose(glm::inverse(modelMatrix));
-    glUniformMatrix4fv(glGetUniformLocation(shader, "normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
+    if (startAnim) {
+        
+        static float startTime = glfwGetTime();
+        float currentTime = glfwGetTime() - startTime;
+        
+        // float moveX = glm::min(currentTime * 3.0f, 5.0f);
+        // float moveY = -pow((0.4 * moveX - 1), 2) + 1;
+        // modelMatrix = glm::translate(modelMatrix, glm::vec3(moveX, moveY, 0));
 
+        for (int i = 0; i < 5; i ++) {
+            glm::mat4 modelMatrix = glm::mat4(1.0f);
+            glm::mat4 testMat = glm::mat4(1.0f);
+            float moveX = glm::min(currentTime * 3.0f, 5.0f);
+            float moveY = -pow((0.4 * moveX - 1), 2) + 1;
+            
+            glm::vec4 movement = glm::vec4(moveX, moveY, 0.0f, 1.0f);
+            testMat = glm::rotate(modelMatrix, i * glm::radians(-72.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            movement = movement * testMat;
 
-    glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
-    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (11 * sizeof(float)));
+            modelMatrix = glm::translate(modelMatrix, glm::vec3(movement.x, movement.y, movement.z));
+            modelMatrix = glm::rotate(modelMatrix, (i + 5) * glm::radians(72.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelMatrix = glm::rotate(modelMatrix, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+            glm::mat4 normalMatrix;
+            normalMatrix = glm::transpose(glm::inverse(modelMatrix));
+            glUniformMatrix4fv(glGetUniformLocation(shader, "normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
+            glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+            glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (11 * sizeof(float)));
+        }
+    }
 
     glUniform1i(glGetUniformLocation(shader, "shaderTextureEyes"), 0);
     glUniform1i(glGetUniformLocation(shader, "shaderRainbow"), 1);
@@ -690,6 +712,8 @@ void render()
     glUniform1i(glGetUniformLocation(particleShader, "particleTexture"), 0);
     glUniform1f(glGetUniformLocation(particleShader, "time"), currentFrame);
     glUniform3f(glGetUniformLocation(particleShader, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
+
+    glm::mat4 normalMatrix;
 
     // render particles
     for (const auto& p : fogParticles) {
@@ -753,6 +777,10 @@ void processInput(GLFWwindow *window)
 {
 
     float cameraSpeed = 2.5f * deltaTime;
+
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        startAnim = true;
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         cameraPos += cameraSpeed * cameraFront;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
