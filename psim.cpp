@@ -173,7 +173,7 @@ struct Particle {
     float rotationSpeed;
 };
 
-std::vector<Particle> particles;
+std::vector<Particle> fogParticles;
 float lastParticleTime = 0.0f;
 
 // using c++ random:
@@ -182,7 +182,7 @@ std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 
 
 // function for creating particles
-void createParticles(float currentTime) {
+void createParticles(std::vector<Particle>& particles, float currentTime, float opacity, glm::vec3 color, glm::vec3 spawn) {
     if (currentTime - lastParticleTime > 0.05f) {    // spawn particles every indicated difference
         lastParticleTime = currentTime;             // update the time when the lat particle was spawned
         
@@ -193,17 +193,16 @@ void createParticles(float currentTime) {
             if (particles.size() < MAX_PARTICLES) {
                 Particle p;
 
-                float theta = distribution(generator) * 2.0f * PI;
-                
-                p.position = glm::vec3(2*cos(theta), -0.5f, 2*sin(theta));
+
+                p.position = spawn;
                 p.velocity = glm::vec3(
                     distribution(generator),
                     distribution(generator),
                     distribution(generator)
                 ) * 0.3f;
-                float gray = 0.9f + distribution(generator) * 0.1f;
-                p.opacity = 0.7f + distribution(generator) * 0.3f;
-                p.color = glm::vec3(gray);
+                // float gray = 0.9f + distribution(generator) * 0.1f;
+                p.opacity = opacity;
+                p.color = color;
                 p.life = PARTICLE_LIFETIME;
                 p.size = PARTICLE_SIZE * (2.0f + distribution(generator) * 0.4f);
                 p.rotation = distribution(generator) * 2.0f * PI;
@@ -216,7 +215,7 @@ void createParticles(float currentTime) {
     }
 }
 
-void updateParticles(float deltaTime) {
+void updateParticles(std::vector<Particle>& particles, float deltaTime) {
     for (size_t i = 0; i < particles.size(); ) {
 
         // if the particle is not dead, update the life, position and velocity
@@ -543,9 +542,14 @@ void render()
 
     // create and update particles:
     // time for difference
-    createParticles(time);
+    float theta = distribution(generator) * 2.0f * PI;
+    float opacity = 0.7f + distribution(generator) * 0.3f;
+    glm::vec3 color = glm::vec3(0.9f + distribution(generator) * 0.1f);
+    glm::vec3 spawn = glm::vec3(2*cos(theta), -0.5f, 2*sin(theta));
+
+    createParticles(fogParticles, time, opacity, color, spawn);
     // deltaTime so the update is consistent in all devices
-    updateParticles(deltaTime);
+    updateParticles(fogParticles, deltaTime);
 
     glUseProgram(particleShader);
     glUniformMatrix4fv(glGetUniformLocation(particleShader, "projectionViewMatrix"), 1, GL_FALSE, glm::value_ptr(projectionViewMatrix));
@@ -561,7 +565,7 @@ void render()
     particleVertices.clear();
 
     // each particle p in vector particles
-    for (const auto& p : particles) {
+    for (const auto& p : fogParticles) {
 
         // for fading
         float lifeRatio = p.life / PARTICLE_LIFETIME;
