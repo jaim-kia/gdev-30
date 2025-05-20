@@ -788,7 +788,7 @@ bool setup()
     // with unique VAO and VBO IDs, and follow the same process above to upload them to the GPU
 
     // load our shader program
-    shader = gdevLoadShader("exer4.vs", "exer4.fs");
+    shader = gdevLoadShader("model.vs", "model.fs");
     if (! shader)
         return false;
 
