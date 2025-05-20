@@ -144,12 +144,12 @@ float bottomBox[] = {
     -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, 1.0f,
 
     // Front face (z = 1.5) - inward
-    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, -1.0f,
-    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
-    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
-    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
-    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
-    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  0.0f, 0.0f, -1.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
+    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
 
     // Back face (z = -1.5) - outward
     1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
@@ -176,12 +176,12 @@ float bottomBox[] = {
     -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   -1.0f, 0.0f, 0.0f,
     
     // Left face (x = -1.5) - inward
-    -1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
-    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
-    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
-    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
-    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
-    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
     
     // Right face (x = 1.5) - outward
     1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
@@ -244,12 +244,12 @@ float topBox[] = {
     -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
     
     // Front face (z = 1.5) - inward
-    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
-    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
-    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
-    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
-    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
-    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, -1.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
+    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    0.0f, 0.0f, -1.0f,
     
     // Back face (z = -1.5) - outward
     1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
@@ -276,12 +276,12 @@ float topBox[] = {
     -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
     
     // Left face (x = -1.5) - inward
-    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
-    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
-    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
-    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
-    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
-    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    1.0f, 0.0f, 0.0f,
     
     // Right face (x = 1.5) - outward
     1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
