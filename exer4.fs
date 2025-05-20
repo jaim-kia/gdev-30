@@ -12,13 +12,14 @@ in vec3 worldSpacePosition;
 in vec3 worldSpaceNormal;
 in vec3 objectColor;
 
-uniform sampler2D shaderTextureEyes;
+uniform sampler2D mainTexture;
 uniform sampler2D shaderRainbow;
 uniform mat4 normalMatrix;
 uniform float time;
 uniform float specularity;
 uniform vec3 lightColor;
 uniform vec3 cameraPos;
+uniform int objectType;
 
 out vec4 fragmentColor;
 
@@ -30,20 +31,26 @@ vec2 rotate(vec2 v, float a){
 void main()
 {
     // light position
-    vec2 lightPositionTwo = rotate(vec2(5.0f, 0.0f), time);
+    vec2 lightPositionTwo = rotate(vec2(6.0f, 0.0f), time);
 
-    vec3 lightPosition = vec3(lightPositionTwo.x, 2, lightPositionTwo.y);
+    vec3 lightPosition = vec3(lightPositionTwo.x, 5, lightPositionTwo.y);
     vec3 lightVector = normalize(lightPosition - worldSpacePosition);
     
     // renormalizing to avoid interpolation
     vec3 finalNormal = normalize(worldSpaceNormal);
 
     // getting the color of the texture
-    vec3 eyes = texture(shaderTextureEyes, shaderTexCoord).xyz;
+    vec3 objectTex = texture(mainTexture, shaderTexCoord).xyz;
     vec2 rotated_coords = rotate(shaderTexCoord, 45*3.14159/180);
     vec3 rainbow = texture(shaderRainbow, vec2(rotated_coords.x + time*2, rotated_coords.y + time)).xyz;
 
-    vec3 objectColorFinal = mix(objectColor, rainbow, (sin(time)+1)/2)*eyes;
+    vec3 objectColorFinal = vec3(1.0f);
+
+    if (objectType == 0) {
+        objectColorFinal = mix(objectColor, rainbow, (sin(time)+1)/2) * objectTex;
+    } else if (objectType == 1) {
+        objectColorFinal = objectTex;
+    }
 
     // specularity
     vec3 refVector = reflect(-lightVector, finalNormal);

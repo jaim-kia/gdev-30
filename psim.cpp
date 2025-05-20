@@ -95,7 +95,7 @@ glm::vec3 sv_mid_zero = glm::vec3(0.0f, 0.3f, 0.4f);
 #define FILLING(c, back) STAR_VERTS(sv_mid_zero, c, back, YELLOW), STAR_VERTS(sv_zero, c, back, YELLOW), STAR_VERTS(sv_mid_zero, (c+1), back, YELLOW), STAR_VERTS(sv_mid_zero, (c+1), back, YELLOW), STAR_VERTS(sv_zero, c, back, YELLOW), STAR_VERTS(sv_zero, (c+1), back, YELLOW)
 
 
-
+// model 1
 float vertices[] =
 {
     // 30 triangles
@@ -118,11 +118,120 @@ float vertices[] =
 
 };
 
+float bottomBox[] = {
+    // x y z r g b s t nx ny nz
+    // bottom pyramid front facing OUT
+    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+
+    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, 1.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
+
+    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  -1.0f, 0.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f), -1.0f, 0.0f, 0.0f,
+
+    // bottom pyramid front facing IN
+    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
+
+    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, -1.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+
+    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f), 1.0f, 0.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+
+    // bottom pyramid back facing OUT
+    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+
+    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, -1.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
+
+    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
+
+    // bottom pyramid back facing IN
+    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
+
+    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, 1.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
+
+    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  -1.0f, 0.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   -1.0f, 0.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
+
+};
+
+float topBox[] = {
+        // upper pyramid front facing OUT
+    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
+
+    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, 1.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
+
+    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    1.0f, 0.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+
+    // upper pyramid front facing IN
+    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+
+    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, -1.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
+
+    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    -1.0f, 0.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   -1.0f, 0.0f, 0.0f,
+
+    // upper pyramid back facing OUT
+    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
+
+    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, -1.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+
+    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),  -1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f), -1.0f, 0.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
+
+    // upper pyramid back facing IN
+    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+
+    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, 1.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
+
+    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),  1.0f, 0.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f), 1.0f, 0.0f, 0.0f,
+};
 // define OpenGL object IDs to represent the vertex array and the shader program in the GPU
-GLuint vao;         // vertex array object (stores the render state for our vertex array)
-GLuint vbo;         // vertex buffer object (reserves GPU memory for our vertex array)
+GLuint vao, bottomBoxVAO, topBoxVAO;         // vertex array object (stores the render state for our vertex array)
+GLuint vbo, bottomBoxVBO, topBoxVBO;         // vertex buffer object (reserves GPU memory for our vertex array)
 GLuint shader;      // combined vertex and fragment shader
-GLuint texture_eyes, texture_rainbow, texture_fog, texture_sparkle;
+GLuint texture_eyes, texture_rainbow, texture_fog, texture_sparkle, texture_lucky_block;
 
 
 glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
@@ -131,6 +240,8 @@ glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
 
 int step = 11; // position, color, texCoord, normal
 int vertexCount = sizeof(vertices)/ (step * sizeof(float));
+int bottomBoxVertexCount = sizeof(bottomBox)/ (step * sizeof(float));
+int topBoxVertexCount = sizeof(topBox)/ (step * sizeof(float));
 
 // Specularity
 float specularity = 4096.0f;
@@ -550,6 +661,41 @@ bool setup()
     glEnableVertexAttribArray(2);
     glEnableVertexAttribArray(3);
 
+    // bottom box vao and vbo
+    glGenVertexArrays(1, &bottomBoxVAO);
+    glGenBuffers(1, &bottomBoxVBO);
+
+    glBindVertexArray(bottomBoxVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, bottomBoxVBO);
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(bottomBox), bottomBox, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*) 0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*) (3 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*) (6 * sizeof(float)));
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*) (8 * sizeof(float)));
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
+
+    // top box vao and vbo
+    glGenVertexArrays(1, &topBoxVAO);
+    glGenBuffers(1, &topBoxVBO);
+
+    glBindVertexArray(topBoxVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, topBoxVBO);
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(topBox), topBox, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*) 0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*) (3 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*) (6 * sizeof(float)));
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*) (8 * sizeof(float)));
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
 
     // important: if you have more vertex arrays to draw, make sure you separately define them
     // with unique VAO and VBO IDs, and follow the same process above to upload them to the GPU
@@ -570,6 +716,9 @@ bool setup()
 
     texture_sparkle = gdevLoadTexture("texture_sparkle.png", GL_REPEAT, true, true);
     if (! texture_sparkle) return false;
+
+    texture_lucky_block = gdevLoadTexture("texture_lucky_block.png", GL_REPEAT, true, true);
+    if (! texture_lucky_block) return false;
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -645,10 +794,17 @@ void render()
     projectionViewMatrix *= glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
     glUniformMatrix4fv(glGetUniformLocation(shader, "projectionViewMatrix"), 1, GL_FALSE, glm::value_ptr(projectionViewMatrix));
 
-
     glBindVertexArray(vao);
-    // middle star
     // modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, -1.0f));
+
+    glUniform1i(glGetUniformLocation(shader, "objectType"), 0);
+    glUniform1i(glGetUniformLocation(shader, "mainTexture"), 0);
+    glUniform1i(glGetUniformLocation(shader, "shaderRainbow"), 1);
+
+    glUniform1f(glGetUniformLocation(shader, "time"), currentFrame);
+    glUniform1f(glGetUniformLocation(shader, "specularity"), specularity);
+    glUniform3f(glGetUniformLocation(shader, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
+    glUniform3f(glGetUniformLocation(shader, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
 
     if (startAnim) {
         
@@ -691,13 +847,37 @@ void render()
         }
     }
 
-    glUniform1i(glGetUniformLocation(shader, "shaderTextureEyes"), 0);
-    glUniform1i(glGetUniformLocation(shader, "shaderRainbow"), 1);
+    // ------------------------ bottom box ------------------------
+    glBindVertexArray(bottomBoxVAO);
+    glm::mat4 bottomBoxModelMatrix = glm::mat4(1.0f);
+    bottomBoxModelMatrix = glm::scale(bottomBoxModelMatrix, glm::vec3(0.5f)); // Scale down the box
 
+    glm::mat4 bottomBoxNormalMatrix = glm::transpose(glm::inverse(bottomBoxModelMatrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader, "normalMatrix"), 1, GL_FALSE, glm::value_ptr(bottomBoxNormalMatrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(bottomBoxModelMatrix));
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_lucky_block);
+
+    glUniform1i(glGetUniformLocation(shader, "mainTexture"), 0);
+    glUniform1i(glGetUniformLocation(shader, "shaderRainbow"), 1);
+    glUniform1i(glGetUniformLocation(shader, "objectType"), 1);
     glUniform1f(glGetUniformLocation(shader, "time"), currentFrame);
     glUniform1f(glGetUniformLocation(shader, "specularity"), specularity);
     glUniform3f(glGetUniformLocation(shader, "lightColor"), lightColor.x, lightColor.y, lightColor.z);
     glUniform3f(glGetUniformLocation(shader, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
+
+    glDrawArrays(GL_TRIANGLES, 0, bottomBoxVertexCount);
+
+    // ------------------------ top box ------------------------
+    glBindVertexArray(topBoxVAO);
+    glm::mat4 topBoxModelMatrix = glm::mat4(1.0f);
+    topBoxModelMatrix = glm::scale(topBoxModelMatrix, glm::vec3(0.5f)); // Scale down the box
+
+    glm::mat4 topBoxNormalMatrix = glm::transpose(glm::inverse(topBoxModelMatrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader, "normalMatrix"), 1, GL_FALSE, glm::value_ptr(topBoxNormalMatrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(topBoxModelMatrix));
+
+    glDrawArrays(GL_TRIANGLES, 0, topBoxVertexCount);
 
 
     // ------------------------ particles ------------------------
