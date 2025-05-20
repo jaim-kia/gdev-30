@@ -33,7 +33,7 @@ void main()
     // light position
     vec2 lightPositionTwo = rotate(vec2(6.0f, 0.0f), time);
 
-    vec3 lightPosition = vec3(lightPositionTwo.x, 5, lightPositionTwo.y);
+    vec3 lightPosition = vec3(lightPositionTwo.x, 10, lightPositionTwo.y);
     vec3 lightVector = normalize(lightPosition - worldSpacePosition);
     
     // renormalizing to avoid interpolation

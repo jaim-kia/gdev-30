@@ -1,5 +1,6 @@
 /*
  *   Controls:
+ *       [Spacebar] begin animation
  *       WASD: movement(W - forward, A - left, S - backward, D - right)
  *       Mouse: move camera perspective
  *       look up/down + W/S: go up or down
@@ -219,20 +220,20 @@ float bottomBox[] = {
 float topBox[] = {
 
     // Top face (y = 1.5) - outward
-    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
-    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
-    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
-    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
-    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
-    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
     
     // Top face (y = 1.5) - inward
-    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
-    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
-    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
-    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
-    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
-    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
+    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
 
     // Front face (z = 1.5) - outward
     -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, 1.0f,
@@ -403,7 +404,6 @@ void createParticles(std::vector<Particle>& particles, float& lastParticleTime, 
                     distribution(generator),
                     distribution(generator)
                 ) * multiplier;
-                // float gray = 0.9f + distribution(generator) * 0.1f;
                 p.opacity = opacity;
                 p.color = color;
                 p.life = PARTICLE_LIFETIME;
