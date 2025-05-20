@@ -119,113 +119,201 @@ float vertices[] =
 };
 
 float bottomBox[] = {
-    // x y z r g b s t nx ny nz
-    // bottom pyramid front facing OUT
-    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    // Bottom face (y = -1.5) - outward
+    -1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+    1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
+    1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
+    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
 
-    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, 1.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
+    // Bottom face (y = -1.5) - inward
+    -1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
 
-    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  -1.0f, 0.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f), -1.0f, 0.0f, 0.0f,
+    // Front face (z = 1.5) - outward
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, 1.0f,
+    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, 1.0f,
+    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, 1.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, 1.0f,
 
-    // bottom pyramid front facing IN
-    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),    0.0f, 1.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),  0.0f, 1.0f, 0.0f,
+    // Front face (z = 1.5) - inward
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, -1.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
+    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
 
-    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  0.0f, 0.0f, -1.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+    // Back face (z = -1.5) - outward
+    1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+    -1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, -1.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
+    -1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, -1.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
 
-    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f), 1.0f, 0.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
-
-    // bottom pyramid back facing OUT
-    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
-
-    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, -1.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
-
-    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    1.0f, 0.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
-
-    // bottom pyramid back facing IN
-    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
-
-    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  0.0f, 0.0f, 1.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
-
-    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  -1.0f, 0.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   -1.0f, 0.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
-
+    // Back face (z = -1.5) - inward
+    1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, 1.0f,
+    -1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, 1.0f,
+    -1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, 1.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, 1.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, 1.0f,
+    
+    // Left face (x = -1.5) - outward
+    -1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  -1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   -1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   -1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   -1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    -1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   -1.0f, 0.0f, 0.0f,
+    
+    // Left face (x = -1.5) - inward
+    -1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
+    
+    // Right face (x = 1.5) - outward
+    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
+    1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
+    1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
+    
+    // Right face (x = 1.5) - inward
+    1.5f, -1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   -1.0f, 0.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    -1.0f, 0.0f, 0.0f,
+    1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  -1.0f, 0.0f, 0.0f,
+    1.5f, -1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  -1.0f, 0.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    -1.0f, 0.0f, 0.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   -1.0f, 0.0f, 0.0f,
+    
+    // Top face (y = 0) - outward (facing up)
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
+    
+    // Top face (y = 0) - inward (facing down)
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f
 };
 
 float topBox[] = {
-        // upper pyramid front facing OUT
-    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
 
-    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, 1.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
-
-    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    1.0f, 0.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),     1.0f, 0.0f, 0.0f,
-
-    // upper pyramid front facing IN
-    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
-
-    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    0.0f, 0.0f, -1.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
-
-    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    -1.0f, 0.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   -1.0f, 0.0f, 0.0f,
-
-    // upper pyramid back facing OUT
-    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
-
-    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, -1.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
-
-    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),  -1.0f, 0.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f), -1.0f, 0.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
-
-    // upper pyramid back facing IN
-    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
-
-    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    0.0f, 0.0f, 1.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
-
-    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),  1.0f, 0.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f), 1.0f, 0.0f, 0.0f,
+    
+    // Top face (y = 1.5) - outward
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    
+    // Top face (y = 1.5) - inward
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
+    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    
+    // Front face (z = 1.5) - outward
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, 1.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, 1.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, 1.0f,
+    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, 1.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
+    
+    // Front face (z = 1.5) - inward
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
+    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, -1.0f,
+    
+    // Back face (z = -1.5) - outward
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, -1.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, -1.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, -1.0f,
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, -1.0f,
+    
+    // Back face (z = -1.5) - inward
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    0.0f, 0.0f, 1.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, 1.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, 1.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   0.0f, 0.0f, 1.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, 1.0f,
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
+    
+    // Left face (x = -1.5) - outward
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   -1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    -1.0f, 0.0f, 0.0f,
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    -1.0f, 0.0f, 0.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    -1.0f, 0.0f, 0.0f,
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
+    
+    // Left face (x = -1.5) - inward
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
+    -1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    1.0f, 0.0f, 0.0f,
+    
+    // Right face (x = 1.5) - outward
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    1.0f, 0.0f, 0.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
+    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    1.0f, 0.0f, 0.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   1.0f, 0.0f, 0.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    1.0f, 0.0f, 0.0f,
+    
+    // Right face (x = 1.5) - inward
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(0.0f),    -1.0f, 0.0f, 0.0f,
+    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    -1.0f, 0.0f, 0.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   -1.0f, 0.0f, 0.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(0.0f),   -1.0f, 0.0f, 0.0f,
+    1.5f,  1.5f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    -1.0f, 0.0f, 0.0f,
+    1.5f,  1.5f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
+    
+    // Bottom face (y = 0) - outward (facing down)
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
+    
+    // Bottom face (y = 0) - inward (facing up)
+    -1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
+    1.5f,  0.0f,  1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
+    1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
+    -1.5f,  0.0f, -1.5f,   1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f
 };
 // define OpenGL object IDs to represent the vertex array and the shader program in the GPU
 GLuint vao, bottomBoxVAO, topBoxVAO;         // vertex array object (stores the render state for our vertex array)
