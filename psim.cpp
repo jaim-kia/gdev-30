@@ -134,17 +134,17 @@ float bottomBox[] = {
     -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f), -1.0f, 0.0f, 0.0f,
 
     // bottom pyramid front facing IN
-    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
+    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),    0.0f, 1.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),  0.0f, 1.0f, 0.0f,
 
-    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, -1.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  0.0f, 0.0f, -1.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
 
-    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f), 1.0f, 0.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f, 1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f), 1.0f, 0.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
 
     // bottom pyramid back facing OUT
     1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
@@ -155,18 +155,18 @@ float bottomBox[] = {
     -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
     1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
 
-    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
+    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    1.0f, 0.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  1.0f, 0.0f, 0.0f,
 
     // bottom pyramid back facing IN
-    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 1.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
+    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 1.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 1.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 1.0f, 0.0f,
 
-    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, 0.0f, 1.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
+    1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  0.0f, 0.0f, 1.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
 
     1.5f, -1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  -1.0f, 0.0f, 0.0f,
     1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   -1.0f, 0.0f, 0.0f,
@@ -184,18 +184,18 @@ float topBox[] = {
     -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
     1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
 
-    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    1.0f, 0.0f, 0.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    1.0f, 0.0f, 0.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   1.0f, 0.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),     1.0f, 0.0f, 0.0f,
 
     // upper pyramid front facing IN
-    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, -1.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
 
-    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, -1.0f,
-    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
+    1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    0.0f, 0.0f, -1.0f,
+    1.5f, -1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 0.0f, -1.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 0.0f, -1.0f,
 
     1.5f, 1.5f, 1.5f,       1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    -1.0f, 0.0f, 0.0f,
     1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
@@ -215,17 +215,17 @@ float topBox[] = {
     -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   -1.0f, 0.0f, 0.0f,
 
     // upper pyramid back facing IN
-    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
+    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, -1.0f, 0.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    0.0f, -1.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),  0.0f, -1.0f, 0.0f,
 
-    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),    0.0f, 0.0f, 1.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
-    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
+    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),    0.0f, 0.0f, 1.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f),   0.0f, 0.0f, 1.0f,
+    1.5f, 1.5f, -1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   0.0f, 0.0f, 1.0f,
 
-    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),  1.0f, 0.0f, 0.0f,
-    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
-    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(-1.0f), 1.0f, 0.0f, 0.0f,
+    -1.5f, 1.5f, -1.5f,     1.0f, 1.0f, 1.0f,   shift(1.0f), shift(1.0f),  1.0f, 0.0f, 0.0f,
+    -1.5f, 1.5f, 1.5f,      1.0f, 1.0f, 1.0f,   shift(-1.0f), shift(1.0f),   1.0f, 0.0f, 0.0f,
+    -1.5f, -1.5f, -1.5f,    1.0f, 1.0f, 1.0f,   shift(1.0f), shift(-1.0f), 1.0f, 0.0f, 0.0f,
 };
 // define OpenGL object IDs to represent the vertex array and the shader program in the GPU
 GLuint vao, bottomBoxVAO, topBoxVAO;         // vertex array object (stores the render state for our vertex array)
@@ -808,8 +808,8 @@ void render()
 
     if (startAnim) {
         
-        static float startTime = glfwGetTime();
-        float currentTime = glfwGetTime() - startTime;
+        static float startTime = time;
+        float currentTime = time - startTime;
         
         // float moveX = glm::min(currentTime * 3.0f, 5.0f);
         // float moveY = -pow((0.4 * moveX - 1), 2) + 1;
@@ -852,6 +852,17 @@ void render()
     glm::mat4 bottomBoxModelMatrix = glm::mat4(1.0f);
     bottomBoxModelMatrix = glm::scale(bottomBoxModelMatrix, glm::vec3(0.5f)); // Scale down the box
 
+    bottomBoxModelMatrix = glm::rotate(bottomBoxModelMatrix, 0.5f * time, glm::vec3(0.0f, 1.0f, 0.0f));
+
+    if (startAnim) {
+        static float startTime = time;
+        float currentTime = time - startTime;
+
+        float speed = glm::min(currentTime * 3.0f, 1.0f);
+
+        bottomBoxModelMatrix = glm::translate(bottomBoxModelMatrix, glm::vec3(0, -speed, 0));
+    }
+
     glm::mat4 bottomBoxNormalMatrix = glm::transpose(glm::inverse(bottomBoxModelMatrix));
     glUniformMatrix4fv(glGetUniformLocation(shader, "normalMatrix"), 1, GL_FALSE, glm::value_ptr(bottomBoxNormalMatrix));
     glUniformMatrix4fv(glGetUniformLocation(shader, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(bottomBoxModelMatrix));
@@ -872,6 +883,18 @@ void render()
     glBindVertexArray(topBoxVAO);
     glm::mat4 topBoxModelMatrix = glm::mat4(1.0f);
     topBoxModelMatrix = glm::scale(topBoxModelMatrix, glm::vec3(0.5f)); // Scale down the box
+
+    topBoxModelMatrix = glm::rotate(topBoxModelMatrix, 0.5f * time, glm::vec3(0.0f, 1.0f, 0.0f));
+
+    if (startAnim) {
+        static float startTime = time;
+        float currentTime = time - startTime;
+
+        float speed = glm::min(currentTime * 3.0f, 1.0f);
+
+        topBoxModelMatrix = glm::translate(topBoxModelMatrix, glm::vec3(0, speed, 0));
+    }
+
 
     glm::mat4 topBoxNormalMatrix = glm::transpose(glm::inverse(topBoxModelMatrix));
     glUniformMatrix4fv(glGetUniformLocation(shader, "normalMatrix"), 1, GL_FALSE, glm::value_ptr(topBoxNormalMatrix));
