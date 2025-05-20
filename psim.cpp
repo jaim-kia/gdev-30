@@ -289,7 +289,7 @@ std::vector<Particle> sparkleParticles;
 std::vector<glm::vec3> sparkleSpawn(5, glm::vec3(0.0f, 0.0f, 0.0f));;
 float lastFogParticleTime = 0.0f;
 float lastSparkleParticleTime = 0.0f;
-float fogScale = 2.0f;
+float fogScale = 1.0f;
 
 // using c++ random:
 std::default_random_engine generator;
@@ -768,7 +768,7 @@ bool setup()
 void render()
 {
     // clear the whole frame
-    glClearColor(0.0f, 0.0f, 0.4f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // using our shader program...
@@ -815,7 +815,7 @@ void render()
         // float moveY = -pow((0.4 * moveX - 1), 2) + 1;
         // modelMatrix = glm::translate(modelMatrix, glm::vec3(moveX, moveY, 0));
 
-        fogScale = glm::min(2.0f + currentTime, 4.0f);
+        fogScale = glm::min(1.0f + currentTime, 4.0f);
 
         for (int i = 0; i < 5; i ++) {
             glm::mat4 modelMatrix = glm::mat4(1.0f);
